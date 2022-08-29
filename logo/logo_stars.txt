@@ -1,0 +1,8 @@
+to star :size
+repeat 5 [fd :size lt 72 fd :size rt 144]
+end
+
+clearscreen setx 0 pendown
+star 20 penup setx 80 pendown
+star 40 penup setx 200 pendown
+star 80 penup ht

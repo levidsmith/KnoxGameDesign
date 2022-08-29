@@ -1,0 +1,6 @@
+setx -200
+filled 2 [repeat 4 [fd 100 rt 90]]
+setx 0
+filled 4 [repeat 5 [fd 50 rt 72]]
+setx 200
+filled 1 [repeat 6 [fd 50 rt 60 ]]

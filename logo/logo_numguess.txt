@@ -1,0 +1,13 @@
+make "num_guess -1
+make "num_secret (random 100) + 1
+make "num_guess_count 0
+while [:num_guess <> :num_secret][
+    make "num_guess readword
+	print :num_guess
+	make "num_guess_count :num_guess_count + 1
+	if [:num_guess > :num_secret] [ print "Lower] 
+	if [:num_guess < :num_secret] [ print "Higher] 
+	if [:num_guess = :num_secret] [ 
+		print (sentence "Correct :num_guess_count "guesses)
+	]
+]
