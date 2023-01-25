@@ -132,8 +132,8 @@ class Bullet {
         this.vel_x = 0;
         this.vel_y = -8;
 
-        this.maxCountdown = 5;
-        this.countdown = this.maxCountdown;
+       // this.maxCountdown = 5;
+       // this.countdown = this.maxCountdown;
         
     } 
 
