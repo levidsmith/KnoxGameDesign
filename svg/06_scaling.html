@@ -1,0 +1,31 @@
+<html>
+    <body>
+        <svg width="640" height="480">
+
+            <g id="knox">
+                <line x1="10" y1="10" x2="10" y2="50" stroke="#ff0000" stroke-width="4"/>
+                <line x1="30" y1="10" x2="10" y2="30" stroke="#ff0000" stroke-width="4"/>
+                <line x1="30" y1="50" x2="10" y2="30" stroke="#ff0000" stroke-width="4"/>
+
+                <line x1="50" y1="10" x2="50" y2="50" stroke="#00ff00" stroke-width="4"/>
+                <line x1="50" y1="10" x2="70" y2="50" stroke="#00ff00" stroke-width="4"/>
+                <line x1="70" y1="50" x2="70" y2="10" stroke="#00ff00" stroke-width="4"/>
+
+                <circle cx="100" cy="30" r="20" stroke="#00ffff" stroke-width="4" fill="none"/>
+
+                <line x1="130" y1="10" x2="170" y2="50" stroke="#ff00ff" stroke-width="4"/>
+                <line x1="130" y1="50" x2="170" y2="10" stroke="#ff00ff" stroke-width="4"/>
+            </g>
+
+            <use x="0" y="25" xlink:href="#knox" transform="scale(2, 2)"/>
+
+            <use x="0" y="350" xlink:href="#knox" transform="scale(2, 0.5)"/>
+            
+            <use x="0" y="200" xlink:href="#knox" transform="scale(.5, 1)"/>
+            
+            <use x="200" y="200" xlink:href="#knox" transform="rotate(45, 100, 100)"/>
+
+        </svg>
+    </body>
+</html>
+
