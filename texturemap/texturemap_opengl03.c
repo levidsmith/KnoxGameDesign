@@ -24,7 +24,7 @@ unsigned char *load_RGB_data(char *filename) {
 
   if (header[0] != 'B' || header[1] != 'M') {
     printf("Not a BMP file\n");
-    exit(1);    
+    exit(1);
   }
 
   dataPos   = *(int*)&(header[0x0A]);
@@ -32,7 +32,6 @@ unsigned char *load_RGB_data(char *filename) {
   width     = *(int*)&(header[0x12]);
   height    = *(int*)&(header[0x16]);
 
-//  printf("dataPos: %d\n", dataPos);
   data = malloc((width * height * 3));
   fseek(file, dataPos, SEEK_SET);
   fread(data, 1, width * height * 3, file);
@@ -51,8 +50,7 @@ unsigned char *load_RGB_data(char *filename) {
     i += 3;
   }
 
-
-  return data; 
+  return data;
 }
 
 void init(void) {
@@ -60,12 +58,9 @@ void init(void) {
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
 
-
-  gluPerspective(60, 1.7778, 0.1, 50);
-  glViewport(0, 0, 1280 / 2, 720 / 2);
-
-  gluLookAt(0.5, 0.5,  -1, 
-            0.5, 0.5,  0,
+  glOrtho(-12.8, 12.8, -7.2, 7.2, 0.1, 10);
+  gluLookAt(-1, 1, -3, 
+            0, 0,  0,
             0, 1,  0);
   glEnable(GL_TEXTURE_2D);
   glEnable(GL_CULL_FACE);
@@ -81,33 +76,54 @@ void display(void) {
   glGenTextures(1, &textureID);
   glBindTexture(GL_TEXTURE_2D, textureID);
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 512, 512, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  free(data);
 
   glBegin(GL_QUADS);
 
-  //front
-  glTexCoord2f(0.0, 1.0);
-  glVertex3f(0,  1, 0);
-
-  glTexCoord2f(1.0, 1.0);
-  glVertex3f( 1,  1, 0);
+  //top
+  glTexCoord2f(0.0, 0.0);
+  glVertex3f(-2, 2,  2);
 
   glTexCoord2f(1.0, 0.0);
-  glVertex3f( 1, 0, 0);
+  glVertex3f( 2, 2,  2);
 
+  glTexCoord2f(1.0, 1.0);
+  glVertex3f( 2, 2, -2);
+
+  glTexCoord2f(0.0, 1.0);
+  glVertex3f(-2, 2, -2);
+
+  //front
   glTexCoord2f(0.0, 0.0);
-  glVertex3f(0, 0, 0);
+  glVertex3f(-2,  2, -2);
+
+  glTexCoord2f(1.0, 0.0);
+  glVertex3f( 2,  2, -2);
+
+  glTexCoord2f(1.0, 1.0);
+  glVertex3f( 2, -2, -2);
+
+  glTexCoord2f(0.0, 1.0);
+  glVertex3f(-2, -2, -2);
+
+  //left
+  glTexCoord2f(0.0, 0.0);
+  glVertex3f(-2,  2,  2);
+
+  glTexCoord2f(1.0, 0.0);
+  glVertex3f(-2,  2, -2);
+
+  glTexCoord2f(1.0, 1.0);
+  glVertex3f(-2, -2, -2);
+
+  glTexCoord2f(0.0, 1.0);
+  glVertex3f(-2, -2,  2);
 
   glEnd();
 
   glFlush();
-
-
 }
 
 int main(int argc, char **argv) {

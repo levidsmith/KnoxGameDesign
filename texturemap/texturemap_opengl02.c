@@ -24,7 +24,7 @@ unsigned char *load_RGB_data(char *filename) {
 
   if (header[0] != 'B' || header[1] != 'M') {
     printf("Not a BMP file\n");
-    exit(1);    
+    exit(1);
   }
 
   dataPos   = *(int*)&(header[0x0A]);
@@ -32,24 +32,13 @@ unsigned char *load_RGB_data(char *filename) {
   width     = *(int*)&(header[0x12]);
   height    = *(int*)&(header[0x16]);
 
-  data = malloc(imageSize);
-  fread(data, 1, imageSize, file);
+//  printf("dataPos: %d\n", dataPos);
+  data = malloc((width * height * 3));
+  fseek(file, dataPos, SEEK_SET);
+  fread(data, 1, width * height * 3, file);
   fclose(file);
 
-  int i = 0;
-  int r, g, b;
-  while (i < imageSize) {
-    r = data[i + 2];
-//  g = data[i + 1];
-    b = data[i + 0];
-
-    data[i + 0] = r;
-//  data[i + 1] = g;
-    data[i + 2] = b;
-    i += 3;
-  }
-
-  return data; 
+  return data;
 }
 
 void init(void) {
