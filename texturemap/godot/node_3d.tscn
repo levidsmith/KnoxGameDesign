@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://gw6mjhugr334"]
+
+[ext_resource type="PackedScene" uid="uid://bnxajsdmxjttf" path="res://tennessee_box.glb" id="1_1xbo7"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.690333, 0.358301, -0.628539, -0.0106749, 0.873707, 0.486335, 0.723413, -0.329024, 0.606973, -2.728, 2.279, 2.403)
+
+[node name="tennessee_box" parent="." instance=ExtResource("1_1xbo7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.181684, 0, -0.248501)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.616898, 0.787043, 0, -0.787043, 0.616898, 0, 3.02754, 4.34783)
