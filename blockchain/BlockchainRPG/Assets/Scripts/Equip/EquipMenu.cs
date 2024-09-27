@@ -21,7 +21,8 @@ public class EquipMenu : MonoBehaviour {
         TextWalletID.text = Wallet.strWalletID;
         //        TextEquipment.text = networkmanager.getEquipment();
 
-        
+
+
     }
 
     // Update is called once per frame
@@ -31,7 +32,7 @@ public class EquipMenu : MonoBehaviour {
 
         TextEquipResult.text = networkmanager.strEquipResult;
 
-
+        TextEquipContract.text = "aaaaa";
     }
 
     public void doReturn() {
@@ -45,5 +46,6 @@ public class EquipMenu : MonoBehaviour {
         iIdentifier = int.Parse(TextEquipIdentifier.text);
         strContract = TextEquipContract.text;
         networkmanager.doEquip(iIdentifier, strContract);
+
     }
 }

@@ -1,4 +1,5 @@
 //2024 Levi D. Smith
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +13,9 @@ public class Player : MonoBehaviour {
     public int iMaxMagic;
     public int iStrength;
 
+    public string strWeaponName;
+    public int iWeaponAttack;
+
     public float fTurnDelay;
     public float fMaxTurnDelay;
 
@@ -24,6 +28,9 @@ public class Player : MonoBehaviour {
         iMagic = iMaxMagic;
 
         iStrength = 1;
+
+        strWeaponName = "Nothing";
+        iWeaponAttack = 0;
 
         fMaxTurnDelay = 5f;
         fTurnDelay = fMaxTurnDelay;

@@ -93,9 +93,10 @@ public class BattleManager : MonoBehaviour {
         player = GameObject.FindObjectOfType<Player>();
         enemy = GameObject.FindObjectOfType<Enemy>();
         if (player.fTurnDelay <= 0f) {
-            int iDamage = player.iStrength;
+            //int iDamage = player.iStrength;
+            int iDamage = player.iWeaponAttack;
             enemy.iHealth -= iDamage;
-            battlelog.AddLog("Player attacks " + enemy.strName + " for " + iDamage + " damage");
+            battlelog.AddLog("Player attacks " + enemy.strName + " with " + player.strWeaponName + " for " + iDamage + " damage");
 
             player.fTurnDelay = player.fMaxTurnDelay;
             if (enemy.iHealth <= 0) {

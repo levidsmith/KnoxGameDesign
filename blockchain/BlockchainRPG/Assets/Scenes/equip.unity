@@ -140,7 +140,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &26254306
 RectTransform:
   m_ObjectHideFlags: 0
@@ -168,7 +168,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 26254305}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
@@ -234,6 +234,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   strEquipment: 
   strEquipResult: 
+  strContract: 
+  strEquipName: 
+  iEquipAttack: 
 --- !u!4 &350144110
 Transform:
   m_ObjectHideFlags: 0
@@ -529,6 +532,7 @@ RectTransform:
   - {fileID: 474558293}
   - {fileID: 1741047848}
   - {fileID: 1921391252}
+  - {fileID: 971231490}
   m_Father: {fileID: 525158359}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -915,7 +919,6 @@ RectTransform:
   - {fileID: 410135279}
   - {fileID: 446412511}
   - {fileID: 435634044}
-  - {fileID: 971231490}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1329,12 +1332,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 525158359}
-  m_RootOrder: 5
+  m_Father: {fileID: 435634044}
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 261.17, y: 77.1}
+  m_AnchoredPosition: {x: -56.94998, y: 56.140038}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &971231491
@@ -1370,9 +1373,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: '
-
-'
+  m_Text: 
 --- !u!222 &971231492
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1454,21 +1455,19 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: 'Your Equipment
 
-    a
+    ?
 
-    b
+    ?
 
-    c
+    ?
 
-    d
+    ?
 
-    e
+    ?
 
-    f
+    ?
 
-    g
-
-'
+    ?'
 --- !u!222 &1001333365
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2085,7 +2084,7 @@ MonoBehaviour:
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_CustomCaretColor: 0
   m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
-  m_Text: 
+  m_Text: 0x1a2303daf2d034bc71fd3cc2c49d4f42b6640162
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
   m_ReadOnly: 0
@@ -2333,7 +2332,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 
+  m_Text: 0x1a2303daf2d034bc71fd3cc2c49d4f42b6640162
 --- !u!222 &2053158862
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -12,6 +12,11 @@ public class NetworkManager : MonoBehaviour {
     public string strEquipment;
     public string strEquipResult;
 
+    public string strContract;
+
+    public string strEquipName;
+    public string iEquipAttack;
+
     void Start() {
         pullEquipment();
         
@@ -59,6 +64,8 @@ public class NetworkManager : MonoBehaviour {
             strEquipment += match.Groups[2].Captures[0].Value + "\n";
             strEquipment += "\n";
 
+            strContract = match.Groups[2].Captures[0].Value;
+
             i++;
         }
     }
@@ -70,6 +77,10 @@ public class NetworkManager : MonoBehaviour {
 
     }
     IEnumerator getEquipmentTraits(string strURL) {
+        string strSelectedWeaponName = "Nothing";
+        int iSelectedWeaponAttack = 0;
+
+
         UnityWebRequest www = UnityWebRequest.Get(strURL);
         www.SetRequestHeader("accept", "application/json");
         www.SetRequestHeader("x-api-key", Wallet.API_KEY);
@@ -90,6 +101,7 @@ public class NetworkManager : MonoBehaviour {
 
         strEquipResult = "Equipment name:\n";
         foreach (Match match in matches) {
+            strSelectedWeaponName = match.Groups[1].Captures[0].Value;
             strEquipResult += match.Groups[1].Captures[0].Value + "\n";
             strEquipResult += "\n";
 
@@ -105,6 +117,11 @@ public class NetworkManager : MonoBehaviour {
 
         strEquipResult += "Equip Traits (type, value):\n";
         foreach (Match match in matches) {
+
+            if (match.Groups[1].Captures[0].Value == "ATK") {
+                iSelectedWeaponAttack = int.Parse(match.Groups[2].Captures[0].Value);
+            }
+
             strEquipResult += match.Groups[1].Captures[0].Value + "\n";
             strEquipResult += match.Groups[2].Captures[0].Value + "\n";
             strEquipResult += "\n";
@@ -128,6 +145,9 @@ public class NetworkManager : MonoBehaviour {
 
         }
 
+        Player player = GameObject.FindObjectOfType<Player>();
+        player.strWeaponName = strSelectedWeaponName;
+        player.iWeaponAttack = iSelectedWeaponAttack;
 
     }
 
