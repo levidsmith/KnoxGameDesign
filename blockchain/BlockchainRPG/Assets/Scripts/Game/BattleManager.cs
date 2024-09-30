@@ -16,6 +16,11 @@ public class BattleManager : MonoBehaviour {
     public GameObject panelBattleLose;
     public List<Texture2D> enemyImages;
 
+    public Button buttonAttack;
+    public Button buttonMagic;
+    public Button buttonItem;
+    public Button buttonDefend;
+
     // Start is called before the first frame update
     void Start() {
         setupEnemies();
@@ -25,6 +30,15 @@ public class BattleManager : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+        if (player == null) {
+            player = GameObject.FindObjectOfType<Player>();
+        }
+        if (player.fTurnDelay <= 0f) {
+            disablePlayerCommands();
+            
+        } else {
+            enablePlayerCommands();
+        }
         
     }
 
@@ -147,6 +161,22 @@ public class BattleManager : MonoBehaviour {
     public void doBattleLoseContinue() {
         SceneManager.LoadScene("title");
     }
+
+    public void enablePlayerCommands() {
+        buttonAttack.interactable = false;
+        buttonMagic.interactable = false;
+        buttonItem.interactable = false;
+        buttonDefend.interactable = false;
+
+    }
+
+    public void disablePlayerCommands() {
+        buttonAttack.interactable = true;
+        buttonMagic.interactable = true;
+        buttonItem.interactable = true;
+        buttonDefend.interactable = true;
+    }
+
 
 }
 
