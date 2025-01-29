@@ -1,0 +1,12 @@
+#install for SDL with mingw64
+$ pacman -S gcc
+
+Download
+SDL2-devel-2.30.11-mingw.tar.gz
+https://github.com/libsdl-org/SDL/releases
+
+$ tar xzvf SDL2-devel-2.30.11-mingw.tar.gz
+$ cd SDL2-2.30.11
+$ make install-package arch=x86_64-w64-mingw32 prefix=/usr
+$ cd demos/draganddrop/SDL
+$ gcc -o draganddrop draganddrop.c `sdl2-config --cflags --libs`
