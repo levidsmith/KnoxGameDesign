@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34316.72
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocketDemo", "SocketDemo\SocketDemo.csproj", "{BF7FF3CC-459E-442E-987D-09AB33A9E20E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BF7FF3CC-459E-442E-987D-09AB33A9E20E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF7FF3CC-459E-442E-987D-09AB33A9E20E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF7FF3CC-459E-442E-987D-09AB33A9E20E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF7FF3CC-459E-442E-987D-09AB33A9E20E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {36D365F6-8BDF-41ED-AFA5-F7D141D425CA}
+	EndGlobalSection
+EndGlobal
