@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35919.96 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PelletEatingDemo", "PelletEatingDemo\PelletEatingDemo.csproj", "{50E23997-99BF-4208-B0C7-1CB4A4D8D4F2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{50E23997-99BF-4208-B0C7-1CB4A4D8D4F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50E23997-99BF-4208-B0C7-1CB4A4D8D4F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50E23997-99BF-4208-B0C7-1CB4A4D8D4F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50E23997-99BF-4208-B0C7-1CB4A4D8D4F2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AA8EF093-A4A4-47BC-A7BB-9375EED8623B}
+	EndGlobalSection
+EndGlobal
