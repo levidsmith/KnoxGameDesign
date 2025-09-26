@@ -87,7 +87,7 @@ namespace SpecialWeapons {
                 return;
             }
 
-            Color c = Color.White;
+            Color c = new Color(255, 128, 128); ;
             if (getIsFrozen()) {
                 c = Color.LightBlue;
             }

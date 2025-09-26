@@ -10,7 +10,7 @@ X                         X
 X                         X
 X          E   E          X
 X        XXXXXXXXX        X
-X            X            X
-X            X            X
-X         E  X  E     E   X
+XX           X           XX
+XX           X           XX
+XX        E  X  E     E  XX
 XXXXXXXXXXXXXXXXXXXXXXXXXXX

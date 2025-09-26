@@ -111,8 +111,16 @@ namespace SpecialWeapons {
 
             player.Draw(_spriteBatch, textures);
 
-            _spriteBatch.DrawString(fontRegular, "pos: " + player.x + ", " + player.y, new Vector2(32, 32), Color.White);
-            _spriteBatch.DrawString(fontRegular, "jumpstate: " + player.getJumpstateName(), new Vector2(32, 64), Color.White);
+            int iLineX = 48;
+            int iLineY = 16;
+            int iLineSpacing = 24;
+            string[] strLines;
+            strLines = new string[] { "jumpstate: " + player.getJumpstateName(), "Jump: Z", "x: " + player.x + "y: " + player.y };
+
+            foreach (string str in strLines) {
+                _spriteBatch.DrawString(fontRegular, str, new Vector2(iLineX, iLineY), Color.White);
+                iLineY += iLineSpacing;
+            }
 
             _spriteBatch.End();
         }

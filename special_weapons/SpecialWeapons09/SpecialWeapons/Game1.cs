@@ -179,7 +179,16 @@ namespace SpecialWeapons {
 
             player.Draw(_spriteBatch, textures);
 
-            _spriteBatch.DrawString(fontRegular, "Weapon: " + player.weapon.strName, new Vector2(32, 64), Color.White);
+            int iLineX = 48;
+            int iLineY = 16;
+            int iLineSpacing = 24;
+            string[] strLines;
+            strLines = new string[] { "Weapon: " + player.weapon.strName, "Jump: Z", "Change Weapon: Tab", "Shoot: Space", "x: " + player.x + "y: " + player.y };
+
+            foreach (string str in strLines) {
+                _spriteBatch.DrawString(fontRegular, str, new Vector2(iLineX, iLineY), Color.White);
+                iLineY += iLineSpacing;
+            }
 
             _spriteBatch.End();
         }

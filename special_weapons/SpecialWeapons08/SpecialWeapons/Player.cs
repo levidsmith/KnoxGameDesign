@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 
@@ -8,7 +7,6 @@ namespace SpecialWeapons {
     public class Player {
         public float x, y, w, h;
         public float vel_x, vel_y;
-        
 
         public float fJumpButtonTime;
         public float fMaxJumpButtonTime;
@@ -18,6 +16,10 @@ namespace SpecialWeapons {
 
         public enum JumpState { Grounded, Rising, Falling };
         public JumpState jumpstate;
+
+        public const float WALK_ACCELERATION = Game1.BLOCK_SIZE * 8;
+        public const float WALK_SPEED_MAX = Game1.BLOCK_SIZE * 8;
+        public const float WALK_DECELERATION = Game1.BLOCK_SIZE * 16;
         public enum WalkState { Left, Right, None };
         public WalkState walkstate;
 
@@ -33,13 +35,10 @@ namespace SpecialWeapons {
         public float fInputDirectionX;
         public float fInputDirectionY;
 
-
-
-
         public Player() {
             w = Game1.BLOCK_SIZE;
             h = Game1.BLOCK_SIZE * 2;
-            x = 2 * Game1.BLOCK_SIZE;
+            x = 4 * Game1.BLOCK_SIZE;
             y = Game1.BLOCK_SIZE;
 
             vel_x = 0f;
@@ -50,13 +49,12 @@ namespace SpecialWeapons {
             fMaxJumpButtonTime = 0.4f;
             iWalkSpriteIndex = 0;
             iXFacing = 1;
-
         }
 
         public void Update(float deltaTime, Game1 game) {
             Block b;
 
-
+            //check room bounds
             if (x < 0) {
                 x = 0;
                 vel_x = 0f;
@@ -65,27 +63,52 @@ namespace SpecialWeapons {
                 vel_x = 0f;
             }
 
-
-
-            //set jump velocity based on acceleration
+            //handle Y velocity
             if (jumpstate == JumpState.Rising) {
+                //set velocity based on jump velocity
                 vel_y = RISE_VELOCITY;
                 fJumpButtonTime += deltaTime;
                 if (fJumpButtonTime > fMaxJumpButtonTime) {
                     jumpstate = JumpState.Falling;
                 }
+
+                //check collision with overhead block
+                b = null;
+                b = checkBlockCollision(game.listBlocks, 0, (int)MathF.Ceiling(vel_y * deltaTime));
+                if (b != null) {
+                    vel_y = 0f;
+                    y = b.y - h;
+                    jumpstate = JumpState.Falling;
+                    fJumpButtonTime = 0f;
+                }
+
             } else if (jumpstate == JumpState.Falling) {
+                //set velocity based on fall acceleration
                 vel_y -= FALL_ACCELERATION;
 
-                b = null;
-                b = checkBlockCollision(game.listBlocks, 0, 0);
-                if (b != null) {
-                    jumpstate = JumpState.Grounded;
-                    vel_y = 0f;
-                    y = b.y + b.h;
+                //check collision with overhead block ("falling" may still have upwards velocity)
+                if (vel_y > 0f) {
+                    b = null;
+                    b = checkBlockCollision(game.listBlocks, 0, (int)MathF.Ceiling(vel_y * deltaTime));
+                    if (b != null) {
+                        vel_y = 0f;
+                        y = b.y - h;
+                        jumpstate = JumpState.Falling;
+                        fJumpButtonTime = 0f;
+                    }
+                } else if (vel_y < 0f) {
+                    //check collision with ground
+                    b = null;
+                    b = checkBlockCollision(game.listBlocks, 0, 0);
+                    if (b != null) {
+                        jumpstate = JumpState.Grounded;
+                        vel_y = 0f;
+                        y = b.y + b.h;
+                    }
                 }
 
             } else if (jumpstate == JumpState.Grounded) {
+                //check if grounded player is now falling
                 b = null;
                 b = checkBlockCollision(game.listBlocks, 0, -1);
                 if (b == null) {
@@ -93,44 +116,67 @@ namespace SpecialWeapons {
                 }
             }
 
-
-
-            //set walk velocity based on acceleration
-            float accel_x = Game1.BLOCK_SIZE * 8;
+            //handle X velocity
             if (walkstate == WalkState.Left) {
-                vel_x -= accel_x * deltaTime;
-                if (vel_x < -Game1.BLOCK_SIZE * 8) {
-                    vel_x = -Game1.BLOCK_SIZE * 8;
+                //calculate new velocity
+                vel_x -= WALK_ACCELERATION * deltaTime;
+                if (vel_x < -WALK_SPEED_MAX) {
+                    vel_x = -WALK_SPEED_MAX;
                 }
-
 
             } else if (walkstate == WalkState.Right) {
-                vel_x += accel_x * deltaTime;
-                if (vel_x > Game1.BLOCK_SIZE * 8) {
-                    vel_x = Game1.BLOCK_SIZE * 8;
+                //calculate new velocity
+                vel_x += WALK_ACCELERATION * deltaTime;
+                if (vel_x > WALK_SPEED_MAX) {
+                    vel_x = WALK_SPEED_MAX;
                 }
+
             } else {
-                float decelerate_x = Game1.BLOCK_SIZE * 16;
                 if (vel_x > 0f) {
-                    vel_x -= decelerate_x * deltaTime;
+                    //calculate new velocity
+                    vel_x -= WALK_DECELERATION * deltaTime;
                     if (vel_x < 0f) {
                         vel_x = 0f;
                     }
+
                 } else if (vel_x < 0f) {
-                    vel_x += decelerate_x * deltaTime;
+                    //calculate new velocity
+                    vel_x += WALK_DECELERATION * deltaTime;
                     if (vel_x > 0f) {
                         vel_x = 0f;
                     }
+
+                }
+            }
+
+            //check horizontal velocity collision
+            if (vel_x > 0f) {
+                //stop moving if collided into block
+                b = null;
+                b = checkBlockCollision(game.listBlocks, (int)MathF.Ceiling(vel_x * deltaTime), 0);
+                if (b != null) {
+                    x = b.x - w;
+                    vel_x = 0f;
+                    walkstate = WalkState.None;
                 }
 
-
+            } else if (vel_x < 0f) {
+                //stop moving if collided into block
+                b = null;
+                b = checkBlockCollision(game.listBlocks, (int)MathF.Floor(vel_x * deltaTime), 0);
+                if (b != null) {
+                    x = b.x + b.w;
+                    vel_x = 0f;
+                    walkstate = WalkState.None;
+                }
 
             }
 
-
+            //move the player
             x += vel_x * deltaTime;
             y += vel_y * deltaTime;
 
+            //update the sprite index
             if (vel_x != 0f && vel_y == 0) {
                 fWalkFrameTime += deltaTime;
                 if (fWalkFrameTime > fWalkFrameTimeMax) {
@@ -143,8 +189,6 @@ namespace SpecialWeapons {
             } else if (vel_x == 0f) {
                 iWalkSpriteIndex = 0;
             }
-
-
 
         }
 
@@ -178,7 +222,7 @@ namespace SpecialWeapons {
         }
 
         public void Draw(SpriteBatch sb, Dictionary<string, Texture2D> textures) {
-            
+
             if (iXFacing == 1) {
                 sb.Draw(textures["player"], new Rectangle((int)x, Game1.SCREEN_HEIGHT - (int)y - (int)h, (int)w, (int)h), new Rectangle(0 + (16 * iWalkSpriteIndex), 0, 16, 32), Color.White);
             } else if (iXFacing == -1) {
@@ -190,7 +234,7 @@ namespace SpecialWeapons {
 
         private Block checkBlockCollision(List<Block> listBlocks, int diff_x, int diff_y) {
             foreach (Block b in listBlocks) {
-                if (collided(b, (int) x + diff_x, (int) y + diff_y)) {
+                if (collided(b, (int)x + diff_x, (int)y + diff_y)) {
                     return b;
                 }
 
@@ -279,14 +323,6 @@ namespace SpecialWeapons {
                 fInputDirectionY = 0f;
 
             }
-
-
         }
-
-
-
     }
-
-
-
 }
