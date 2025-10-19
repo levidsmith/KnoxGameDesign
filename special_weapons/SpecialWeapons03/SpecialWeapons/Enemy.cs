@@ -106,7 +106,7 @@ namespace SpecialWeapons {
         }
 
         public void startFreeze() {
-            fFreezeCountdown = 2f;
+            fFreezeCountdown = 5f;
         }
 
     }
