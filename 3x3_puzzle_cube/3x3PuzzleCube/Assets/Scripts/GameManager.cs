@@ -4,6 +4,7 @@ using JetBrains.Annotations;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
@@ -14,6 +15,8 @@ public class GameManager : MonoBehaviour {
     Vector3? vectRotationPoint = null;
     float fRotateDegrees;
     const float ROTATE_SPEED = 360f;
+
+    public GameObject panelSolved;
 
     void Start() {
         listRotatePieces = new List<Piece>();
@@ -128,14 +131,20 @@ public class GameManager : MonoBehaviour {
         Vector3 pos;
         Piece p;
 
+        List<Piece> pieces = new List<Piece>();
+
+
         for (i = -1; i <= 1; i++) {
             for (j = -1; j <= 1; j++) {
                 pos = new Vector3(i, j, -1);
                 p = Instantiate(PiecePrefab, pos, Quaternion.identity).GetComponent<Piece>();
                 p.transform.SetParent(this.transform);
+                pieces.Add(p);
+
                 pos = new Vector3(i, j, 1);
                 p = Instantiate(PiecePrefab, pos, Quaternion.identity).GetComponent<Piece>();
                 p.transform.SetParent(this.transform);
+                pieces.Add(p);
 
             }
         }
@@ -144,17 +153,59 @@ public class GameManager : MonoBehaviour {
             pos = new Vector3(-1, i, 0);
             p = Instantiate(PiecePrefab, pos, Quaternion.identity).GetComponent<Piece>();
             p.transform.SetParent(this.transform);
+            pieces.Add(p);
+
             pos = new Vector3(1, i, 0);
             p = Instantiate(PiecePrefab, pos, Quaternion.identity).GetComponent<Piece>();
             p.transform.SetParent(this.transform);
+            pieces.Add(p);
         }
 
         pos = new Vector3(0, -1, 0);
         p = Instantiate(PiecePrefab, pos, Quaternion.identity).GetComponent<Piece>();
         p.transform.SetParent(this.transform);
+        pieces.Add(p);
+
         pos = new Vector3(0, 1, 0);
         p = Instantiate(PiecePrefab, pos, Quaternion.identity).GetComponent<Piece>();
         p.transform.SetParent(this.transform);
+        pieces.Add(p);
+
+
+
+        foreach (Piece p1 in pieces) {
+            if (Mathf.RoundToInt(p1.transform.position.z) == -1) {
+                p1.sideF.GetComponent<Renderer>().material = p1.materials[4];
+                p1.iValueF = 4;
+            }
+
+            if (Mathf.RoundToInt(p1.transform.position.z) == 1) {
+                p1.sideB.GetComponent<Renderer>().material = p1.materials[5];
+                p1.iValueB = 5;
+            }
+
+            if (Mathf.RoundToInt(p1.transform.position.x) == -1) {
+                p1.sideL.GetComponent<Renderer>().material = p1.materials[2];
+                p1.iValueL = 2;
+            }
+
+            if (Mathf.RoundToInt(p1.transform.position.x) == 1) {
+                p1.sideR.GetComponent<Renderer>().material = p1.materials[3];
+                p1.iValueR = 3;
+            }
+
+            if (Mathf.RoundToInt(p1.transform.position.y) == 1) {
+                p1.sideU.GetComponent<Renderer>().material = p1.materials[0];
+                p1.iValueR = 0;
+            }
+
+
+            if (Mathf.RoundToInt(p1.transform.position.y) == -1) {
+                p1.sideD.GetComponent<Renderer>().material = p1.materials[1];
+                p1.iValueD = 1;
+            }
+
+        }
     }
 
     public void rotateLayer() {
@@ -182,7 +233,55 @@ public class GameManager : MonoBehaviour {
                 }
 
                 listRotatePieces.Clear();
+                bool isSolved = checkSolved();
+                Debug.Log("SOLVED: " + isSolved);
+                if (isSolved) {
+                    showSolvedPanel();
+                } else {
+                    hideSolvedPanel();
+                }
             }
         }
     }
+
+    public bool checkSolved() {
+        Piece[] pieces = GetComponentsInChildren<Piece>();
+
+        foreach (Piece p1 in pieces) {
+            if (Mathf.RoundToInt(p1.transform.eulerAngles.x) != 0 ||
+                Mathf.RoundToInt(p1.transform.eulerAngles.y) != 0 ||
+                Mathf.RoundToInt(p1.transform.eulerAngles.z) != 0
+                ) {
+                return false;
+
+            }
+        }
+
+        return true;
+    }
+
+    public Piece getPieceAt(int x, int y, int z) {
+        Piece[] pieces = GetComponentsInChildren<Piece>();
+
+        foreach (Piece p1 in pieces) {
+            if (Mathf.RoundToInt(p1.transform.position.x) == x &&
+                Mathf.RoundToInt(p1.transform.position.y) == y &&
+                Mathf.RoundToInt(p1.transform.position.z) == z
+                ) {
+                return p1;
+            }
+        }
+
+        return null;
+    }
+
+    public void showSolvedPanel() {
+        panelSolved.SetActive(true);
+    }
+
+    public void hideSolvedPanel() {
+        panelSolved.SetActive(false);
+    }
+
+
 }
