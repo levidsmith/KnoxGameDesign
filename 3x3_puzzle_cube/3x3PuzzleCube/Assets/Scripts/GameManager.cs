@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour {
 
     Vector3? vectRotationPoint = null;
     float fRotateDegrees;
-    const float ROTATE_SPEED = 360f;
+    const float ROTATE_SPEED = 90f;
 
     public GameObject panelSolved;
 
