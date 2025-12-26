@@ -1,0 +1,111 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+
+namespace RealEstate {
+    public class ModeMortgage : Mode {
+        public int iMortgageSelect;
+
+        public override void Update(GameTime gameTime, KeyboardState keyboardCurrent, KeyboardState keyboardPrevious) {
+                if (keyboardCurrent.IsKeyDown(Keys.Up) == true && keyboardPrevious.IsKeyDown(Keys.Up) == false) {
+                    mortgageSelectPrevious();
+                }
+
+                if (keyboardCurrent.IsKeyDown(Keys.Down) == true && keyboardPrevious.IsKeyDown(Keys.Down) == false) {
+                    mortgageSelectNext();
+                }
+
+                if (keyboardCurrent.IsKeyDown(Keys.M) == true && keyboardPrevious.IsKeyDown(Keys.M) == false) {
+                    mortgageSelectMortgage();
+                }
+
+                if (keyboardCurrent.IsKeyDown(Keys.U) == true && keyboardPrevious.IsKeyDown(Keys.U) == false) {
+                    mortgageSelectUnmortgage();
+                }
+
+
+                if (keyboardCurrent.IsKeyDown(Keys.Q) == true && keyboardPrevious.IsKeyDown(Keys.Q) == false) {
+                    gamemanager.modeCurrent = gamemanager.modes["board"];
+                }
+
+
+            }
+
+        public override void Draw(GameTime gameTime, SpriteBatch _spriteBatch, Dictionary<string, SpriteFont> fonts, Dictionary<string, Texture2D> sprites) {
+
+            _spriteBatch.Begin();
+
+
+
+            _spriteBatch.DrawString(fonts["fontNormal"], "Current player: " + gamemanager.playerCurrent.strName, new Vector2(32, 700), Color.Black);
+
+                    _spriteBatch.DrawString(fonts["fontSmall"], "M: Mortgage", new Vector2(32, 750), Color.Black);
+                    _spriteBatch.DrawString(fonts["fontSmall"], "U: Unmortgage", new Vector2(32, 800), Color.Black);
+                    _spriteBatch.DrawString(fonts["fontSmall"], "Q: Return", new Vector2(32, 900), Color.Black);
+
+                    _spriteBatch.DrawString(fonts["fontSmall"], "Select property to mortgage", new Vector2(200, 200), Color.Black);
+
+                    int i = 0;
+                    foreach (Property p in gamemanager.playerCurrent.properties) {
+                        Color c = Color.Black;
+                        if (iMortgageSelect == i) {
+                            c = Color.Blue;
+                        }
+                        if (p.isMortgaged) {
+                            _spriteBatch.DrawString(fonts["fontSmall"], "M", new Vector2(200, 220 + (i * 20)), c);
+                        }
+                        _spriteBatch.DrawString(fonts["fontSmall"], p.strName, new Vector2(250, 220 + (i * 20)), c);
+                        i++;
+
+                    }
+
+            for (i = 0; i < gamemanager.players.Count; i++) {
+                Vector2 vectPosition = new Vector2(400, 700 + (i * 50));
+                _spriteBatch.DrawString(fonts["fontNormal"], gamemanager.players[i].strName, vectPosition, Player.colors[i]);
+                _spriteBatch.DrawString(fonts["fontNormal"], " $" + gamemanager.players[i].iMoney, vectPosition + new Vector2(100, 0), Color.Black);
+            }
+
+
+            _spriteBatch.End();
+        }
+
+        public void mortgageSelectPrevious() {
+            iMortgageSelect--;
+            if (iMortgageSelect < 0) {
+                iMortgageSelect = gamemanager.playerCurrent.properties.Count - 1;
+            }
+
+        }
+
+        public void mortgageSelectNext() {
+            iMortgageSelect++;
+            if (iMortgageSelect >= gamemanager.playerCurrent.properties.Count) {
+                iMortgageSelect = 0;
+            }
+        }
+
+        public void mortgageSelectMortgage() {
+            if (!gamemanager.playerCurrent.properties[iMortgageSelect].isMortgaged) {
+                gamemanager.playerCurrent.iMoney += gamemanager.playerCurrent.properties[iMortgageSelect].iPurchasePrice / 2;
+                gamemanager.playerCurrent.properties[iMortgageSelect].isMortgaged = true;
+            }
+
+        }
+
+        public void mortgageSelectUnmortgage() {
+            if (gamemanager.playerCurrent.properties[iMortgageSelect].isMortgaged) {
+                gamemanager.playerCurrent.iMoney -= (int)((gamemanager.playerCurrent.properties[iMortgageSelect].iPurchasePrice / 2) * 1.1f);
+                gamemanager.playerCurrent.properties[iMortgageSelect].isMortgaged = false;
+            }
+
+        }
+
+
+    }
+}
+

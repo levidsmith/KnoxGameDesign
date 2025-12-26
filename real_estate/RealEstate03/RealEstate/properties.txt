@@ -1,0 +1,39 @@
+
+Oliver Springs,60,2
+
+Karns,60,4
+
+Kingston,100,6
+
+Rockwood,100,6
+Harriman,120,8
+
+Coalfield,140,10
+
+Wartburg,140,10
+Sunbright,160,12
+
+Pigeon Forge,180,14
+
+Gatlinburg,180,14
+Halls Crossroads,200,16
+
+Lenior City,220,18
+
+Morristown,220,18
+Seymour,240,20
+
+Clinton,260,22
+Powell,260,22
+
+Sevierville,280,24
+
+Alcoa,300,26
+Maryville,300,26
+
+Farragut,320,28
+
+
+Oak Ridge,350,35
+
+Knoxville,400,50
