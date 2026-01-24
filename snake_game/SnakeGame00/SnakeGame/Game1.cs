@@ -1,0 +1,109 @@
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+
+namespace SnakeGame {
+    public class Game1 : Game {
+        private GraphicsDeviceManager _graphics;
+        private SpriteBatch _spriteBatch;
+
+        public const int SCREEN_WIDTH = 1600;
+        public const int SCREEN_HEIGHT = 1040;
+        public const int CELL_SIZE = 20;
+
+        Texture2D sprCell;
+        GameManager gamemanager;
+      
+
+        public Game1() {
+            _graphics = new GraphicsDeviceManager(this);
+            _graphics.PreferredBackBufferWidth = SCREEN_WIDTH;
+            _graphics.PreferredBackBufferHeight = SCREEN_HEIGHT;
+            _graphics.ApplyChanges();
+            Content.RootDirectory = "Content";
+            IsMouseVisible = true;
+        }
+
+
+        protected override void Initialize() {
+            // TODO: Add your initialization logic here
+            gamemanager = new GameManager();
+
+            base.Initialize();
+        }
+
+        protected override void LoadContent() {
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            sprCell = Content.Load<Texture2D>("cell");
+
+            // TODO: use this.Content to load your game content here
+        }
+
+        protected override void Update(GameTime gameTime) {
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+                Exit();
+
+            // TODO: Add your update logic here
+            if (Keyboard.GetState().IsKeyDown(Keys.Up) && gamemanager.snakes[0].direction != Snake.Direction.SOUTH) {
+                gamemanager.snakes[0].direction = Snake.Direction.NORTH;
+            } else if (Keyboard.GetState().IsKeyDown(Keys.Down) && gamemanager.snakes[0].direction != Snake.Direction.NORTH) {
+                gamemanager.snakes[0].direction = Snake.Direction.SOUTH;
+            } else if (Keyboard.GetState().IsKeyDown(Keys.Right) && gamemanager.snakes[0].direction != Snake.Direction.WEST) {
+                gamemanager.snakes[0].direction = Snake.Direction.EAST;
+            } else if (Keyboard.GetState().IsKeyDown(Keys.Left) && gamemanager.snakes[0].direction != Snake.Direction.EAST) {
+                gamemanager.snakes[0].direction = Snake.Direction.WEST;
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.W) && gamemanager.snakes[1].direction != Snake.Direction.SOUTH) {
+                gamemanager.snakes[1].direction = Snake.Direction.NORTH;
+            } else if (Keyboard.GetState().IsKeyDown(Keys.S) && gamemanager.snakes[1].direction != Snake.Direction.NORTH) {
+                gamemanager.snakes[1].direction = Snake.Direction.SOUTH;
+            } else if (Keyboard.GetState().IsKeyDown(Keys.D) && gamemanager.snakes[1].direction != Snake.Direction.WEST) {
+                gamemanager.snakes[1].direction = Snake.Direction.EAST;
+            } else if (Keyboard.GetState().IsKeyDown(Keys.A) && gamemanager.snakes[1].direction != Snake.Direction.EAST) {
+                gamemanager.snakes[1].direction = Snake.Direction.WEST;
+            }
+
+
+            float deltaTime = (float) gameTime.ElapsedGameTime.TotalSeconds;
+            gamemanager.Update(deltaTime);
+            
+
+
+            base.Update(gameTime);
+        }
+
+        protected override void Draw(GameTime gameTime) {
+            Color colorQBasicBlue = new Color(0, 0, 170);
+            Color colorWalls = new Color(255, 85, 85);
+            GraphicsDevice.Clear(colorQBasicBlue);
+
+            int iRowOffset = 2;
+
+            // TODO: Add your drawing code here
+            _spriteBatch.Begin();
+            if (gamemanager.snakes[0].isAlive) {
+                _spriteBatch.Draw(sprCell, new Rectangle(gamemanager.snakes[0].iCol * CELL_SIZE, (gamemanager.snakes[0].iRow + iRowOffset) * CELL_SIZE, CELL_SIZE, CELL_SIZE), gamemanager.snakes[0].color);
+            }
+
+            if (gamemanager.snakes[1].isAlive) {
+                _spriteBatch.Draw(sprCell, new Rectangle(gamemanager.snakes[1].iCol * CELL_SIZE, (gamemanager.snakes[1].iRow + iRowOffset) * CELL_SIZE, CELL_SIZE, CELL_SIZE), gamemanager.snakes[1].color);
+            }
+
+            int i, j;
+            for (i = 0; i < Arena.ARENA_ROWS; i++) {
+                for (j = 0; j < Arena.ARENA_COLS; j++) {
+                    if (gamemanager.arena.cells[i, j] == Arena.CELL_WALL) {
+                        _spriteBatch.Draw(sprCell, new Rectangle(j * CELL_SIZE, (i + iRowOffset) * CELL_SIZE, CELL_SIZE, CELL_SIZE), colorWalls);
+                    }
+                }
+            }
+
+            _spriteBatch.End();
+
+
+            base.Draw(gameTime);
+        }
+    }
+}
