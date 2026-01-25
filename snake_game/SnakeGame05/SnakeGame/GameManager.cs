@@ -5,24 +5,20 @@ using System.Data;
 using System.Xml.Linq;
 
 namespace SnakeGame {
-    public class GameManager {
+    internal class GameManager {
 
         public List<Snake> snakes;
         public Arena arena;
         public int iLevel;
         public float fUpdateDelay;
         public float fMaxUpdateDelay;
-        public float fUpdateDelayReduction;
         public Collectible collectible;
-
-        public Options options;
 
         const int POINTS_DEATH = -10;
         const int LENGTH_ADD_MULTIPLIER = 4;
         const int COLLECTIBLE_VALUE_FOR_NEXT_LEVEL = 9;
         const int START_SNAKE_LENGTH = 2;
         const int START_SNAKE_LIVES = 5;
-        const int START_LEVEL = 1;
 
         public enum GameState { TITLE, OPTIONS, PLAYING, PRE_LEVEL, PLAYER_DEAD, GAME_OVER };
         public GameState gamestate;
@@ -30,10 +26,10 @@ namespace SnakeGame {
         Random rand;
 
         public GameManager() {
-            options = new Options();
-            iLevel = START_LEVEL;
-            rand = new Random();
-            //setupGame();
+            iLevel = 1;
+            gamestate = GameState.PRE_LEVEL;
+             rand = new Random();
+            setupGame();
 
         }
 
@@ -42,33 +38,29 @@ namespace SnakeGame {
 
             Snake snake;
 
-            if (options.iPlayers > 0) {
-                snake = new Snake();
-                snake.id = 1;
-                snake.strName = "Sammy";
-                snake.iHead = 1;
-                snake.iLength = START_SNAKE_LENGTH;
-                snake.iLives = 5;
-                snake.isAlive = true;
-                snake.direction = Snake.Direction.EAST;
-                snake.color = new Color(255, 255, 85);
+            snake = new Snake();
+            snake.id = 1;
+            snake.strName = "Sammy";
+            snake.iHead = 1;
+            snake.iLength = START_SNAKE_LENGTH;
+            snake.iLives = 5;
+            snake.isAlive = true;
+            snake.direction = Snake.Direction.EAST;
+            snake.color = new Color(255, 255, 85);
 
-                snakes.Add(snake);
-            }
+            snakes.Add(snake);
 
-            if (options.iPlayers > 1) {
-                snake = new Snake();
-                snake.id = 2;
-                snake.strName = "Jake";
-                snake.iHead = 1;
-                snake.iLength = START_SNAKE_LENGTH;
-                snake.iLives = 5;
-                snake.isAlive = true;
-                snake.direction = Snake.Direction.EAST;
-                snake.color = new Color(255, 85, 255);
+            snake = new Snake();
+            snake.id = 2;
+            snake.strName = "Jake";
+            snake.iHead = 1;
+            snake.iLength = START_SNAKE_LENGTH;
+            snake.iLives = 5;
+            snake.isAlive = true;
+            snake.direction = Snake.Direction.EAST;
+            snake.color = new Color(255, 85, 255);
 
-                snakes.Add(snake);
-            }
+            snakes.Add(snake);
 
             arena = new Arena();
 
@@ -77,8 +69,7 @@ namespace SnakeGame {
 
             setupNextCollectible(true);
 
-            //fMaxUpdateDelay = 0.1f;
-            fMaxUpdateDelay = options.fSpeed;
+            fMaxUpdateDelay = 0.1f;
             fUpdateDelay = fMaxUpdateDelay;
 
         }
@@ -87,145 +78,105 @@ namespace SnakeGame {
 
             switch (iLevel) {
                 case 1:
-                    if (options.iPlayers > 0) {
-                        snakes[0].iRow = 25;
-                        snakes[0].iCol = 50;
-                        snakes[0].direction = Snake.Direction.EAST;
-                    }
+                    snakes[0].iRow = 25;
+                    snakes[0].iCol = 50;
+                    snakes[0].direction = Snake.Direction.EAST;
 
-                    if (options.iPlayers > 1) {
-                        snakes[1].iRow = 25;
-                        snakes[1].iCol = 30;
-                        snakes[1].direction = Snake.Direction.WEST;
-                    }
+                    snakes[1].iRow = 25;
+                    snakes[1].iCol = 30;
+                    snakes[1].direction = Snake.Direction.WEST;
 
                     break;
                 case 2:
-                    if (options.iPlayers > 0) {
-                        snakes[0].iRow = 7;
-                        snakes[0].iCol = 60;
-                        snakes[0].direction = Snake.Direction.WEST;
-                    }
+                    snakes[0].iRow = 7;
+                    snakes[0].iCol = 60;
+                    snakes[0].direction = Snake.Direction.WEST;
 
-                    if (options.iPlayers > 1) {
-                        snakes[1].iRow = 43;
-                        snakes[1].iCol = 20;
-                        snakes[1].direction = Snake.Direction.EAST;
-                    }
+                    snakes[1].iRow = 43;
+                    snakes[1].iCol = 20;
+                    snakes[1].direction = Snake.Direction.EAST;
 
                     break;
                 case 3:
-                    if (options.iPlayers > 0) {
-                        snakes[0].iRow = 25;
-                        snakes[0].iCol = 50;
-                        snakes[0].direction = Snake.Direction.NORTH;
-                    }
+                    snakes[0].iRow = 25;
+                    snakes[0].iCol = 50;
+                    snakes[0].direction = Snake.Direction.NORTH;
 
-                    if (options.iPlayers > 1) {
-                        snakes[1].iRow = 25;
-                        snakes[1].iCol = 30;
-                        snakes[1].direction = Snake.Direction.SOUTH;
-                    }
+                    snakes[1].iRow = 25;
+                    snakes[1].iCol = 30;
+                    snakes[1].direction = Snake.Direction.SOUTH;
 
                     break;
                 case 4:
-                    if (options.iPlayers > 0) {
-                        snakes[0].iRow = 7;
-                        snakes[0].iCol = 60;
-                        snakes[0].direction = Snake.Direction.WEST;
-                    }
+                    snakes[0].iRow = 7;
+                    snakes[0].iCol = 60;
+                    snakes[0].direction = Snake.Direction.WEST;
 
-                    if (options.iPlayers > 1) {
-                        snakes[1].iRow = 43;
-                        snakes[1].iCol = 20;
-                        snakes[1].direction = Snake.Direction.EAST;
-                    }
+                    snakes[1].iRow = 43;
+                    snakes[1].iCol = 20;
+                    snakes[1].direction = Snake.Direction.EAST;
 
                     break;
                 case 5:
-                    if (options.iPlayers > 0) {
-                        snakes[0].iRow = 25;
-                        snakes[0].iCol = 50;
-                        snakes[0].direction = Snake.Direction.NORTH;
-                    }
+                    snakes[0].iRow = 25;
+                    snakes[0].iCol = 50;
+                    snakes[0].direction = Snake.Direction.NORTH;
 
-                    if (options.iPlayers > 1) {
-                        snakes[1].iRow = 25;
-                        snakes[1].iCol = 30;
-                        snakes[1].direction = Snake.Direction.SOUTH;
-                    }
+                    snakes[1].iRow = 25;
+                    snakes[1].iCol = 30;
+                    snakes[1].direction = Snake.Direction.SOUTH;
 
                     break;
                 case 6:
-                    if (options.iPlayers > 0) {
-                        snakes[0].iRow = 7;
-                        snakes[0].iCol = 65;
-                        snakes[0].direction = Snake.Direction.SOUTH;
-                    }
+                    snakes[0].iRow = 7;
+                    snakes[0].iCol = 65;
+                    snakes[0].direction = Snake.Direction.SOUTH;
 
-                    if (options.iPlayers > 1) {
-                        snakes[1].iRow = 43;
-                        snakes[1].iCol = 15;
-                        snakes[1].direction = Snake.Direction.NORTH;
-                    }
+                    snakes[1].iRow = 43;
+                    snakes[1].iCol = 15;
+                    snakes[1].direction = Snake.Direction.NORTH;
 
                     break;
                 case 7:
-                    if (options.iPlayers > 0) {
-                        snakes[0].iRow = 7;
-                        snakes[0].iCol = 65;
-                        snakes[0].direction = Snake.Direction.SOUTH;
-                    }
+                    snakes[0].iRow = 7;
+                    snakes[0].iCol = 65;
+                    snakes[0].direction = Snake.Direction.SOUTH;
 
-                    if (options.iPlayers > 1) {
-                        snakes[1].iRow = 43;
-                        snakes[1].iCol = 15;
-                        snakes[1].direction = Snake.Direction.NORTH;
-                    }
+                    snakes[1].iRow = 43;
+                    snakes[1].iCol = 15;
+                    snakes[1].direction = Snake.Direction.NORTH;
 
                     break;
                 case 8:
-                    if (options.iPlayers > 0) {
-                        snakes[0].iRow = 7;
-                        snakes[0].iCol = 65;
-                        snakes[0].direction = Snake.Direction.SOUTH;
-                    }
+                    snakes[0].iRow = 7;
+                    snakes[0].iCol = 65;
+                    snakes[0].direction = Snake.Direction.SOUTH;
 
-                    if (options.iPlayers > 1) {
-                        snakes[1].iRow = 43;
-                        snakes[1].iCol = 15;
-                        snakes[1].direction = Snake.Direction.NORTH;
-                    }
+                    snakes[1].iRow = 43;
+                    snakes[1].iCol = 15;
+                    snakes[1].direction = Snake.Direction.NORTH;
 
                     break;
 
                 case 9:
-                    if (options.iPlayers > 0) {
-                        snakes[0].iRow = 40;
-                        snakes[0].iCol = 75;
-                        snakes[0].direction = Snake.Direction.NORTH;
-                    }
+                    snakes[0].iRow = 40;
+                    snakes[0].iCol = 75;
+                    snakes[0].direction = Snake.Direction.NORTH;
 
-                    if (options.iPlayers > 1) {
-                        snakes[1].iRow = 15;
-                        snakes[1].iCol = 5;
-                        snakes[1].direction = Snake.Direction.SOUTH;
-                    }
+                    snakes[1].iRow = 15;
+                    snakes[1].iCol = 5;
+                    snakes[1].direction = Snake.Direction.SOUTH;
 
                     break;
 
                 default:
-                    if (options.iPlayers > 0) {
-                        snakes[0].iRow = 7;
-                        snakes[0].iCol = 65;
-                        snakes[0].direction = Snake.Direction.SOUTH;
-                    }
+                    snakes[0].iRow = 7;
+                    snakes[0].iCol = 65;
+                    snakes[0].direction = Snake.Direction.SOUTH;
 
-                    if (options.iPlayers > 1) {
-                        snakes[1].iRow = 43;
-                        snakes[1].iCol = 15;
-                        snakes[1].direction = Snake.Direction.NORTH;
-                    }
+                    snakes[1].iRow = 43;
+                    snakes[1].iCol = 15;
+                    snakes[1].direction = Snake.Direction.NORTH;
 
                     break;
             }
@@ -241,7 +192,6 @@ namespace SnakeGame {
             setupPlayers(iLevel);
             arena.setup(iLevel);
             setupNextCollectible(true);
-            fUpdateDelayReduction = 0f;
         }
 
         public void resetGame() {
@@ -334,7 +284,7 @@ namespace SnakeGame {
                 checkCollision();
 
 
-                fUpdateDelay = fMaxUpdateDelay - fUpdateDelayReduction;
+                fUpdateDelay = fMaxUpdateDelay;
             }
 
         }
@@ -362,8 +312,7 @@ namespace SnakeGame {
                     if (collectible.iValue == COLLECTIBLE_VALUE_FOR_NEXT_LEVEL) {
                         setupNextLevel();
                     } else {
-                        setupNextCollectible(false);
-                        fUpdateDelayReduction += 0.005f;
+                      setupNextCollectible(false);
                     }
 
                     Game1.sounds["sound_pickup"].Play();
@@ -371,31 +320,27 @@ namespace SnakeGame {
 
             }
 
-            if (options.iPlayers > 1) {
-                if (snakes[0].iRow == snakes[1].iRow &&
-                    snakes[0].iCol == snakes[1].iCol) {
+            if (snakes[0].iRow == snakes[1].iRow &&
+                snakes[0].iCol == snakes[1].iCol) {
 
-                    snakes[0].iLives -= 1;
-                    snakes[0].isAlive = false;
-                    snakes[0].iScore += POINTS_DEATH;
-                    snakes[1].iLives -= 1;
-                    snakes[1].isAlive = false;
-                    snakes[1].iScore += POINTS_DEATH;
-                    checkGameOver();
-                    if (gamestate != GameState.GAME_OVER) {
-                        doPlayerDead();
-                    }
-
+                snakes[0].iLives -= 1;
+                snakes[0].isAlive = false;
+                snakes[0].iScore += POINTS_DEATH;
+                snakes[1].iLives -= 1;
+                snakes[1].isAlive = false;
+                snakes[1].iScore += POINTS_DEATH;
+                checkGameOver();
+                if (gamestate != GameState.GAME_OVER) {
+                    doPlayerDead();
                 }
+
             }
 
         }
 
         private void checkGameOver() {
-            foreach (Snake snake in snakes) {
-                if (snake.iLives < 0) {
-                    gamestate = GameState.GAME_OVER;
-                }
+            if (snakes[0].iLives < 0 || snakes[1].iLives < 0) {
+                gamestate = GameState.GAME_OVER;
             }
 
         }
@@ -403,11 +348,6 @@ namespace SnakeGame {
         private void doPlayerDead() {
             gamestate = GameState.PLAYER_DEAD;
             Game1.sounds["sound_dead"].Play();
-        }
-
-        public void doTitleScreen() {
-            gamestate = GameState.TITLE;
-            Game1.sounds["sound_intro"].Play();
         }
 
 

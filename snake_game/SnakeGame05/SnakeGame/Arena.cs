@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SnakeGame {
-    public class Arena {
-        public const int ARENA_ROWS = 48;
+    internal class Arena {
+        public const int ARENA_ROWS = 50;
         public const int ARENA_COLS = 80;
         public byte[,] cells;
 
@@ -44,96 +44,87 @@ namespace SnakeGame {
                 case 1:
                     break;
                 case 2:
-                    for (i = 20; i <= 60; i++) {
-                        setCellWall(25, i);
+                    for (i = 20; i < 60; i++) {
+                        cells[25, i] = CELL_WALL;
                     }
                     break;
                 case 3:
-                    for (i = 10; i <= 40; i++) {
-                        setCellWall(i, 20);
-                        setCellWall(i, 60);
+                    for (i = 10; i < 40; i++) {
+                        cells[i, 20] = CELL_WALL;
+                        cells[i, 60] = CELL_WALL;
                     }
                     break;
                 case 4:
-                    for (i = 4; i <= 30; i++) {
-                        setCellWall(i, 20);
-                        setCellWall(53 - i, 60);
+                    for (i = 4; i < 30; i++) {
+                        cells[i, 20] = CELL_WALL;
+                        cells[53 - i, 60] = CELL_WALL;
                     }
-                    for (i = 2; i <= 40; i++) {
-                        setCellWall(38, i);
-                        setCellWall(15, 81 - i);
+                    for (i = 2; i < 40; i++) {
+                        cells[38, i] = CELL_WALL;
+                        cells[15, 81 - i] = CELL_WALL;
                     }
-
                     break;
                 case 5:
-                    for (i = 13; i <= 39; i++) {
-                        setCellWall(i, 21);
-                        setCellWall(i, 59);
+                    for (i = 13; i < 39; i++) {
+                        cells[i, 21] = CELL_WALL;
+                        cells[i, 59] = CELL_WALL;
                     }
-                    for (i = 23; i <= 57; i++) {
-                        setCellWall(11, i);
-                        setCellWall(41, i);
+                    for (i = 23; i < 57; i++) {
+                        cells[11, i] = CELL_WALL;
+                        cells[41, i] = CELL_WALL;
                     }
                     break;
 
                 case 6:
-                    for (i = 4; i <= 49; i++) {
+                    for (i = 4; i < 49; i++) {
                         if (i > 30 || i < 23) {
-                            setCellWall(i, 10);
-                            setCellWall(i, 20);
-                            setCellWall(i, 30);
-                            setCellWall(i, 40);
-                            setCellWall(i, 50);
-                            setCellWall(i, 60);
-                            setCellWall(i, 70);
+                            cells[i, 10] = CELL_WALL;
+                            cells[i, 20] = CELL_WALL;
+                            cells[i, 30] = CELL_WALL;
+                            cells[i, 40] = CELL_WALL;
+                            cells[i, 50] = CELL_WALL;
+                            cells[i, 60] = CELL_WALL;
+                            cells[i, 70] = CELL_WALL;
                         }
                     }
                     break;
                 case 7:
-                    for (i = 4; i <= 49; i += 2) {
-                        setCellWall(i, 40);
+                    for (i = 4; i < 49; i += 2) {
+                        cells[i, 40] = CELL_WALL;
                     }
                     break;
                 case 8:
-                    for (i = 4; i <= 40; i++) {
-                        setCellWall(i, 10);
-                        setCellWall(53 - i, 20);
-                        setCellWall(i, 30);
-                        setCellWall(53 - i, 40);
-                        setCellWall(i, 50);
-                        setCellWall(53 -i, 60);
-                        setCellWall(i, 70);
+                    for (i = 4; i < 40; i++) {
+                        cells[i, 10] = CELL_WALL;
+                        cells[53 - i, 20] = CELL_WALL;
+                        cells[i, 30] = CELL_WALL;
+                        cells[53 - i, 40] = CELL_WALL;
+                        cells[i, 50] = CELL_WALL;
+                        cells[53 - i, 60] = CELL_WALL;
+                        cells[i, 70] = CELL_WALL;
                     }
                     break;
                 case 9:
-                    for (i = 6; i <= 47; i++) {
-                        setCellWall(i, i);
-                        setCellWall(i, i + 28);
+                    for (i = 6; i < 47; i++) {
+                        cells[i, i] = CELL_WALL;
+                        cells[i, i + 28] = CELL_WALL;
                     }
                     break;
                 default:
-                    for (i = 4; i <= 49; i += 2) {
-                        setCellWall(i, 10);
-                        setCellWall(i + 1, 20);
-                        setCellWall(i, 30);
-                        setCellWall(i + 1, 40);
-                        setCellWall(i, 50);
-                        setCellWall(i + 1, 60);
-                        setCellWall(i, 70);
+                    for (i = 4; i < 49; i += 2) {
+                        cells[i, 10] = CELL_WALL;
+                        cells[i + 1, 20] = CELL_WALL;
+                        cells[i, 30] = CELL_WALL;
+                        cells[i + 1, 40] = CELL_WALL;
+                        cells[i, 50] = CELL_WALL;
+                        cells[i + 1, 60] = CELL_WALL;
+                        cells[i, 70] = CELL_WALL;
                     }
                     break;
 
 
             }
 
-        }
-
-        private void setCellWall(int iRow, int iCol) {
-            //Converts from QBasic index format starting at 1 and
-            //subtracts off the top two rows in QBasic for displaying score
-            int iRowOffset = 3;
-            int iColOffset = 1;
-            cells[iRow - iRowOffset, iCol - iColOffset] = CELL_WALL;
         }
     }
 }

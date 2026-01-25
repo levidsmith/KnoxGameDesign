@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SnakeGame {
-    internal class SnakeBody {
+    public class SnakeBody {
         public int iRow;
         public int iCol;
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace SnakeGame {
-    internal class Snake {
+    public class Snake {
 
         public enum Direction { NORTH, SOUTH, WEST, EAST };
 
