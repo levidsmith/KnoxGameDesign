@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿//2026 - Levi D. Smith <developer@levidsmith.com>
+//for KnoxGameDesign www.knoxgamedesign.org
+using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
 namespace SnakeGame {
@@ -9,7 +11,6 @@ namespace SnakeGame {
         public byte id;
         public string strName;
 
-        public int iHead;
         public int iLength;
 
         public int iRow;

@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿//2026 - Levi D. Smith <developer@levidsmith.com>
+//for KnoxGameDesign www.knoxgamedesign.org
+using Microsoft.Xna.Framework;
 
 namespace SnakeGame {
     public class Collectible {

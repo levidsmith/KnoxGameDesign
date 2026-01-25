@@ -1,9 +1,5 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
-
+﻿//2026 - Levi D. Smith <developer@levidsmith.com>
+//for KnoxGameDesign www.knoxgamedesign.org
 namespace SnakeGame {
     public class Options {
 

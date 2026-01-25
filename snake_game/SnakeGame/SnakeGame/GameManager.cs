@@ -1,8 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿//2026 - Levi D. Smith <developer@levidsmith.com>
+//for KnoxGameDesign www.knoxgamedesign.org
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Xml.Linq;
 
 namespace SnakeGame {
     public class GameManager {
@@ -46,7 +46,6 @@ namespace SnakeGame {
                 snake = new Snake();
                 snake.id = 1;
                 snake.strName = "Sammy";
-                snake.iHead = 1;
                 snake.iLength = START_SNAKE_LENGTH;
                 snake.iLives = 5;
                 snake.isAlive = true;
@@ -60,7 +59,6 @@ namespace SnakeGame {
                 snake = new Snake();
                 snake.id = 2;
                 snake.strName = "Jake";
-                snake.iHead = 1;
                 snake.iLength = START_SNAKE_LENGTH;
                 snake.iLives = 5;
                 snake.isAlive = true;

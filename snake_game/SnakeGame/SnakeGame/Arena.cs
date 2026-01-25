@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿//2026 - Levi D. Smith <developer@levidsmith.com>
+//for KnoxGameDesign www.knoxgamedesign.org
 namespace SnakeGame {
     public class Arena {
         public const int ARENA_ROWS = 48;
