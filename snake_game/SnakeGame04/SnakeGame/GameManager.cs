@@ -16,7 +16,7 @@ namespace SnakeGame {
 
         const int POINTS_DEATH = -10;
         const int LENGTH_ADD_MULTIPLIER = 4;
-        const int COLLECTIBLE_VALUE_FOR_NEXT_LEVEL = 9;
+        const int COLLECTIBLE_VALUE_FOR_NEXT_LEVEL = 1;
         const int START_SNAKE_LENGTH = 2;
         const int START_SNAKE_LIVES = 5;
 
@@ -314,8 +314,6 @@ namespace SnakeGame {
                     } else {
                       setupNextCollectible(false);
                     }
-
-                    Game1.sounds["sound_pickup"].Play();
                 }
 
             }
@@ -347,7 +345,6 @@ namespace SnakeGame {
 
         private void doPlayerDead() {
             gamestate = GameState.PLAYER_DEAD;
-            Game1.sounds["sound_dead"].Play();
         }
 
 

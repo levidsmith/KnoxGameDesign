@@ -1,9 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System.Collections.Generic;
 
 namespace SnakeGame {
     public class Game1 : Game {
@@ -17,8 +15,6 @@ namespace SnakeGame {
         Texture2D sprCell;
         GameManager gamemanager;
         SpriteFont sprFont;
-
-        public static Dictionary<string, SoundEffect> sounds;
       
 
         public Game1() {
@@ -43,12 +39,6 @@ namespace SnakeGame {
             sprCell = Content.Load<Texture2D>("cell");
             sprFont = Content.Load<SpriteFont>("DosFont");
 
-            sounds = new Dictionary<string, SoundEffect>();
-            sounds.Add("sound_intro", Content.Load<SoundEffect>("sound_intro"));
-            sounds.Add("sound_level_start", Content.Load<SoundEffect>("sound_level_start"));
-            sounds.Add("sound_dead", Content.Load<SoundEffect>("sound_dead"));
-            sounds.Add("sound_pickup", Content.Load<SoundEffect>("sound_pickup"));
-
             // TODO: use this.Content to load your game content here
         }
 
@@ -62,15 +52,12 @@ namespace SnakeGame {
                 case GameManager.GameState.PRE_LEVEL:
                     if (Keyboard.GetState().IsKeyDown(Keys.Space)) {
                         gamemanager.gamestate = GameManager.GameState.PLAYING;
-                        sounds["sound_level_start"].Play();
                     }
                     break;
                 case GameManager.GameState.PLAYER_DEAD:
                     if (Keyboard.GetState().IsKeyDown(Keys.Space)) {
                         gamemanager.resetLevel();
-                        gamemanager.gamestate = GameManager.GameState.PLAYING;
-                        sounds["sound_level_start"].Play();
-                    }
+                        gamemanager.gamestate = GameManager.GameState.PLAYING;                    }
                     break;
                 case GameManager.GameState.GAME_OVER:
                     if (Keyboard.GetState().IsKeyDown(Keys.Y)) {

@@ -5,13 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SnakeGame {
-    public class SnakeBody {
+    internal class Collectible {
         public int iRow;
         public int iCol;
+        public int iValue;
 
-        public SnakeBody(int iRow, int iCol) {
-            this.iRow = iRow;
-            this.iCol = iCol;
+        public Collectible() {
+            this.iValue = 1;
         }
     }
 }

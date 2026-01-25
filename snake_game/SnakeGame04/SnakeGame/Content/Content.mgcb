@@ -32,27 +32,3 @@
 /processorParam:TextureFormat=Compressed
 /build:DosFont.spritefont
 
-#begin sound_dead.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:sound_dead.wav
-
-#begin sound_intro.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:sound_intro.wav
-
-#begin sound_level_start.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:sound_level_start.wav
-
-#begin sound_pickup.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:sound_pickup.wav
-
