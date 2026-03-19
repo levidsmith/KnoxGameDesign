@@ -1,0 +1,9 @@
+{
+  "name": "project02",
+  "pathEmu": "D:\\ldsmith\\presentations\\n64dev\\demo\\ares-windows-x64\\ares-v147\\ares.exe",
+  "pathN64Inst": "",
+  "romName": "project02",
+  "sceneIdLastOpened": 1,
+  "sceneIdOnBoot": 1,
+  "sceneIdOnReset": 1
+}
