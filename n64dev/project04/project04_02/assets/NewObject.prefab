@@ -1,0 +1,30 @@
+{
+  "obj": {
+    "children": [],
+    "components": [],
+    "enabled": true,
+    "id": 7,
+    "name": "New Object",
+    "pos": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "propOverrides": {},
+    "rot": [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "selectable": true,
+    "uuid": 1392865263,
+    "uuidPrefab": 0
+  },
+  "uuid": 3183847910
+}
