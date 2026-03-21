@@ -1,0 +1,327 @@
+{
+  "conf": {
+    "audioFreq": 32000,
+    "clearColor": [
+      0.3921568691730499,
+      0.5843137502670288,
+      0.929411768913269,
+      1.0
+    ],
+    "doClearColor": true,
+    "doClearDepth": true,
+    "fbFormat": 0,
+    "fbHeight": 240,
+    "fbWidth": 320,
+    "filter": 1,
+    "frameLimit": 0,
+    "layers2D": [
+      {
+        "blender": 0,
+        "depthCompare": false,
+        "depthWrite": false,
+        "fog": false,
+        "fogColor": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "fogColorMode": 0,
+        "fogMax": 0.0,
+        "fogMin": 0.0,
+        "name": "2D"
+      }
+    ],
+    "layers3D": [
+      {
+        "blender": 0,
+        "depthCompare": true,
+        "depthWrite": true,
+        "fog": false,
+        "fogColor": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "fogColorMode": 0,
+        "fogMax": 0.0,
+        "fogMin": 0.0,
+        "name": "3D Opaque"
+      },
+      {
+        "blender": 5242944,
+        "depthCompare": true,
+        "depthWrite": false,
+        "fog": false,
+        "fogColor": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "fogColorMode": 0,
+        "fogMax": 0.0,
+        "fogMin": 0.0,
+        "name": "3D Transp."
+      }
+    ],
+    "layersPtx": [
+      {
+        "blender": 0,
+        "depthCompare": true,
+        "depthWrite": true,
+        "fog": false,
+        "fogColor": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "fogColorMode": 0,
+        "fogMax": 0.0,
+        "fogMin": 0.0,
+        "name": "PTX Opaque"
+      }
+    ],
+    "name": "Scene",
+    "renderPipeline": 0
+  },
+  "graph": {
+    "children": [
+      {
+        "children": [],
+        "components": [
+          {
+            "data": {
+              "aspect": 0.0,
+              "far": 5000.0,
+              "fov": 65.0,
+              "near": 100.0,
+              "vpOffset": [
+                0,
+                0
+              ],
+              "vpSize": [
+                320,
+                240
+              ]
+            },
+            "id": 3,
+            "name": "Camera",
+            "uuid": 591397515709753079
+          }
+        ],
+        "enabled": true,
+        "id": 1,
+        "name": "Camera",
+        "pos": [
+          0.0,
+          0.0,
+          -500.0
+        ],
+        "propOverrides": {},
+        "rot": [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          0.9999974966049194,
+          0.999994158744812,
+          0.9999803304672241
+        ],
+        "selectable": true,
+        "uuid": 2593312191,
+        "uuidPrefab": 0
+      },
+      {
+        "children": [],
+        "components": [
+          {
+            "data": {
+              "color": [
+                0.899193525314331,
+                0.899193525314331,
+                0.899193525314331,
+                1.0
+              ],
+              "index": 0,
+              "type": 0
+            },
+            "id": 2,
+            "name": "Light",
+            "uuid": 17810945128247966012
+          }
+        ],
+        "enabled": true,
+        "id": 3,
+        "name": "Ambient Light",
+        "pos": [
+          -2.757801055908203,
+          377.9345703125,
+          253.75326538085938
+        ],
+        "propOverrides": {},
+        "rot": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "selectable": true,
+        "uuid": 2808468358,
+        "uuidPrefab": 0
+      },
+      {
+        "children": [],
+        "components": [
+          {
+            "data": {
+              "color": [
+                1.0,
+                1.0,
+                1.0,
+                0.9529411792755127
+              ],
+              "index": 0,
+              "type": 1
+            },
+            "id": 2,
+            "name": "Light",
+            "uuid": 7911520859892149400
+          }
+        ],
+        "enabled": true,
+        "id": 5,
+        "name": "Dir. Light",
+        "pos": [
+          -57.58601760864258,
+          370.2309265136719,
+          303.4007263183594
+        ],
+        "propOverrides": {},
+        "rot": [
+          -0.47982004284858704,
+          -0.3826749920845032,
+          0.7145895957946777,
+          -0.33569976687431335
+        ],
+        "scale": [
+          0.9999931454658508,
+          1.0000041723251343,
+          1.0000038146972656
+        ],
+        "selectable": true,
+        "uuid": 1258577913,
+        "uuidPrefab": 0
+      },
+      {
+        "children": [],
+        "components": [
+          {
+            "data": {
+              "culling": false,
+              "layerIdx": 0,
+              "material": {
+                "depth": 0,
+                "env": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "fresnel": 0,
+                "fresnelColor": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "lighting": false,
+                "prim": [
+                  1.0,
+                  1.0,
+                  1.0,
+                  0.9921568632125854
+                ],
+                "setDepth": false,
+                "setEnv": false,
+                "setFresnel": false,
+                "setLighting": false,
+                "setPrim": true
+              },
+              "meshFilter": "",
+              "model": 15548249565902776507
+            },
+            "id": 1,
+            "name": "Model (Static)",
+            "uuid": 1194680501142561258
+          },
+          {
+            "data": {
+              "args": {},
+              "script": 14251102052643971014
+            },
+            "id": 0,
+            "name": "Code",
+            "uuid": 1488267567275609086
+          }
+        ],
+        "enabled": true,
+        "id": 2,
+        "name": "KnoxBox",
+        "pos": [
+          0.0,
+          0.0,
+          -360.0
+        ],
+        "propOverrides": {},
+        "rot": [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "selectable": true,
+        "uuid": 1407552857,
+        "uuidPrefab": 0
+      }
+    ],
+    "components": [],
+    "enabled": true,
+    "id": 0,
+    "name": "Scene",
+    "pos": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "propOverrides": {},
+    "rot": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "selectable": true,
+    "uuid": 4252910706,
+    "uuidPrefab": 0
+  }
+}
