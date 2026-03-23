@@ -1,0 +1,105 @@
+{
+  "obj": {
+    "children": [],
+    "components": [
+      {
+        "data": {
+          "culling": false,
+          "layerIdx": 0,
+          "material": {
+            "depth": 0,
+            "env": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "fresnel": 0,
+            "fresnelColor": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lighting": false,
+            "prim": [
+              0.16129028797149658,
+              1.0,
+              0.0,
+              0.0
+            ],
+            "setDepth": false,
+            "setEnv": false,
+            "setFresnel": false,
+            "setLighting": false,
+            "setPrim": true
+          },
+          "meshFilter": "",
+          "model": 17660758381478844321
+        },
+        "id": 1,
+        "name": "Model (Static)",
+        "uuid": 12557256672759719538
+      },
+      {
+        "data": {
+          "args": {
+            "fCountdown": "1",
+            "fMaxCountdown": "2",
+            "fSpeed": "480"
+          },
+          "script": 14134846233274340093
+        },
+        "id": 0,
+        "name": "Code",
+        "uuid": 11289396463139592432
+      },
+      {
+        "data": {
+          "halfExtend": [
+            100.0,
+            100.0,
+            100.0
+          ],
+          "isFixed": false,
+          "isTrigger": true,
+          "maskRead": 1,
+          "maskWrite": 1,
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "type": 0
+        },
+        "id": 5,
+        "name": "Collision-Body",
+        "uuid": 336725501671086444
+      }
+    ],
+    "enabled": true,
+    "id": 4,
+    "name": "Enemy",
+    "pos": [
+      0.0,
+      0.0,
+      -700.0
+    ],
+    "propOverrides": {},
+    "rot": [
+      0.0,
+      0.9999593496322632,
+      0.0,
+      -0.00901914294809103
+    ],
+    "scale": [
+      1.0000032186508179,
+      1.0,
+      1.0000032186508179
+    ],
+    "selectable": true,
+    "uuid": 71136041,
+    "uuidPrefab": 0
+  },
+  "uuid": 3361483041
+}
