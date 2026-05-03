@@ -25,11 +25,15 @@ async def game(id):
     return None 
 
 @app.get("/game")
-async def game_query(name: str):
+async def game_query(name: str | None = None ):
+  game_data = load_game_data()
+  if (name is None):
+    for key in game_data.keys():
+      return game_data 
+
   name = name.lower()
   data = None
 
-  game_data = load_game_data()
 
 
   for key in game_data.keys():
