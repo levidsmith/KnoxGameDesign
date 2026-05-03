@@ -3,6 +3,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 import mods.mega_man_2
+import mods.mike_tysons_punch_out
 
 app = FastAPI()
 
@@ -40,6 +41,10 @@ async def game_query(name: str):
 @app.post("/game/NES-XR-USA/password")
 async def name_password(query: mods.mega_man_2.QueryParams):
   return mods.mega_man_2.get_password(query)
+  
+@app.post("/game/NES-PT-USA/password")
+async def name_password(query: mods.mike_tysons_punch_out.QueryParams):
+  return mods.mike_tysons_punch_out.get_password(query)
   
 
 
