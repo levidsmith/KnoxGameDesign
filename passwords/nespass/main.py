@@ -1,5 +1,5 @@
 # 2026 Levi D. Smith <developer@levidsmith.com>
-
+ 
 from fastapi import FastAPI
 from pydantic import BaseModel
 import mods.mega_man_2
