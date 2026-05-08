@@ -4,12 +4,13 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 import mods.mega_man_2
 import mods.mike_tysons_punch_out
+import mods.metroid
 
 app = FastAPI()
 
 @app.get("/")
 async def root():
-  return { "message": "Hello" }
+  return { "message": "Hello FastAPI" }
 
 @app.get("/game/{id}")
 async def game(id):
@@ -49,6 +50,10 @@ async def name_password(query: mods.mega_man_2.QueryParams):
 @app.post("/game/NES-PT-USA/password")
 async def name_password(query: mods.mike_tysons_punch_out.QueryParams):
   return mods.mike_tysons_punch_out.get_password(query)
+  
+@app.post("/game/NES-MT-USA/password")
+async def name_password(query: mods.metroid.QueryParams):
+  return mods.metroid.get_password(query)
   
 
 
