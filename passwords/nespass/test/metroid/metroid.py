@@ -72,8 +72,15 @@ def bufferToPasswordCharacters(buffer):
   print(f"{str_password[12:18]} {str_password[18:24]}")
 
 
- 
-buffer = BitBuffer()
+def setChecksum(bytes):
+  CHECKSUM_BYTE = 17
+  checksum_i = 0
+  for i in range(CHECKSUM_BYTE):
+    checksum_i += bytes[i]
+  print(f"checksum: {checksum_i}")
+  bytes[CHECKSUM_BYTE] = checksum_i & 0xFF
+
+#buffer = BitBuffer()
 
 #MARU_MARI_BIT = 76
 #buffer.setBit(MARU_MARI_BIT, True)
@@ -143,43 +150,99 @@ buffer = BitBuffer()
 
 #print(f"{buffer.data[17]}")
 
-def bytesToMetroidAlphabet():
-  checksum = bytearray(6) 
-  checksum[0] = 0b00000000
-  checksum[1] = 0b00000000
-  checksum[2] = 0b11000001
-  checksum[3] = 0b10000111
-  checksum[4] = 0b11110000
-  checksum[5] = 0b01000001 
+def bytesToMetroidAlphabet(bytes):
+#  checksum = bytearray(6) 
+#  checksum[0] = 0b00000000
+#  checksum[1] = 0b00000000
+#  checksum[2] = 0b11000001
+#  checksum[3] = 0b10000111
+#  checksum[4] = 0b11110000
+#  checksum[5] = 0b01000001 
+  checksum = bytes
 
-  part2 = (checksum[2] & 0b00111111)
-  chunk20 = (part2 >> 0)
-  print(f"chunk20: {METROID_ALPHABET[chunk20]}")
+#  part2 = (checksum[2] & 0b00111111)
+#  chunk20 = (part2 >> 0)
+#  print(f"chunk20: {METROID_ALPHABET[chunk20]}")
 
-  part2 = (checksum[3] & 0b11111100)
-  chunk21 = (part2 >> 2)
-  print(f"chunk21: {METROID_ALPHABET[chunk21]}")
+  part2 = (checksum[0] & 0b11111100)
+  chunk0 = (part2 >> 2)
+#  print(f"chunk0: {METROID_ALPHABET[chunk0]}")
 
-  part1 = (checksum[3] & 0b00000011)
-  part2 = (checksum[4] & 0b11110000)
-  chunk22 = (part1 << 4) | (part2 >> 4)
-  print(f"chunk22: {METROID_ALPHABET[chunk22]}")
+  part1 = (checksum[0] & 0b00000011)
+  part2 = (checksum[1] & 0b11110000)
+  chunk1 = (part1 << 4) | (part2 >> 4)
+#  print(f"chunk1: {METROID_ALPHABET[chunk1]}")
 
-  part1 = (checksum[4] & 0b00001111)
-  part2 = (checksum[5] & 0b11000000)
-  chunk23 = (part1 << 2) | (part2 >> 6)
+  part1 = (checksum[1] & 0b00001111)
+  part2 = (checksum[2] & 0b11000000)
+  chunk2 = (part1 << 2) | (part2 >> 6)
+#  print(f"chunk2: {METROID_ALPHABET[chunk2]}")
 
-  #print(chunk23)
-  print(f"chunk23: {METROID_ALPHABET[chunk23]}")
+  chunk3 = checksum[2] & 0b00111111
+#  print(f"chunk3: {METROID_ALPHABET[chunk3]}")
 
-  chunk24 = checksum[5] & 0b00111111
-  print(f"chunk24: {METROID_ALPHABET[chunk24]}")
+  print(f"{METROID_ALPHABET[chunk0]}{METROID_ALPHABET[chunk1]}{METROID_ALPHABET[chunk2]}{METROID_ALPHABET[chunk3]}")
 
+#MISSILE_BYTE = 10
+#buffer.setByte(MISSILE_BYTE, 8)
+
+#CHECKSUM_BYTE = 17
+#buffer.setByte(17, 8)
+
+#print("8 missiles")
+#bytesToMetroidAlphabet([0x00, 0x00, 0x00])
+#bytesToMetroidAlphabet([0x00, 0x00, 0x00])
+#bytesToMetroidAlphabet([0x00, 0x00, 0x00])
+#print("")
+#bytesToMetroidAlphabet([0x00, 0x00, 0x00])
+#bytesToMetroidAlphabet([0x00, 0x08, 0x00])
+#bytesToMetroidAlphabet([0x00, 0x00, 0x08])
+
+#print("Start in Norfair")
+#bytesToMetroidAlphabet([0x00, 0x00, 0x00])
+#bytesToMetroidAlphabet([0x00, 0x00, 0x00])
+#bytesToMetroidAlphabet([0x00, 0x00, 0x01])
+#print("")
+#bytesToMetroidAlphabet([0x00, 0x00, 0x00])
+#bytesToMetroidAlphabet([0x00, 0x00, 0x00])
+#bytesToMetroidAlphabet([0x00, 0x00, 0x01])
+
+
+#print("Ice Beam (byte 9 bit 7) with 5 missile (byte 10) ")
+#bytes = [0x00, 0x00, 0x00,
+#         0x00, 0x00, 0x00,
+#         0x00, 0x00, 0x00,
+#         0x80, 0x05, 0x00,
+#         0x00, 0x00, 0x00,
+#         0x00, 0x00, 0x00
+#        ]
+#setChecksum(bytes)
+
+#for i in range(6):
+#  bytesToMetroidAlphabet([bytes[(3 * i)], bytes[(3 * i) + 1], bytes[(3 * i) + 2]])
+
+#print("Ice Beam (byte 9 bit 7) with 5 missile (byte 10) ")
+bytes = [0x00, 0x00, 0x00,
+         0x00, 0x00, 0x00,
+         0x00, 0x00, 0x00,
+         0x00, 0x00, 0x00,
+         0x00, 0x00, 0x00,
+         0x00, 0x00, 0x00
+        ]
 
 MISSILE_BYTE = 10
-buffer.setByte(MISSILE_BYTE, 8)
+bytes[MISSILE_BYTE] = 0x19 
 
-CHECKSUM_BYTE = 17
-buffer.setByte(17, 8)
+POWERUP_BYTE = 9 
+POWERUP_BOMBS_BIT = 0b00000001
+POWERUP_HIGHJUMP_BIT = 0b00000010
+POWERUP_SCREWATTACK_BIT = 0b00001000
+POWERUP_SCREWATTACK_BIT = 0b00001000
+POWERUP_ICEBEAM_BIT = 0b10000000
+bytes[POWERUP_BYTE] = POWERUP_ICEBEAM_BIT | POWERUP_SCREWATTACK_BIT | POWERUP_HIGHJUMP_BIT
 
-bytesToMetroidAlphabet()
+setChecksum(bytes)
+
+for i in range(6):
+  bytesToMetroidAlphabet([bytes[(3 * i)], bytes[(3 * i) + 1], bytes[(3 * i) + 2]])
+
