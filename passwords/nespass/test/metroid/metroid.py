@@ -33,7 +33,7 @@ def bytesToMetroidAlphabet(bytes):
 bytes = [0x00] * PASSWORD_SIZE_BYTES
 
 MISSILE_BYTE = 10
-bytes[MISSILE_BYTE] = 0x19  # 25 missiles 
+bytes[MISSILE_BYTE] = 0xFF  # 255 missiles 
 
 POWERUP_BYTE = 9 
 POWERUP_BOMBS_BIT = 0b00000001
@@ -44,7 +44,96 @@ POWERUP_MARUMARI_BIT = 0b00010000
 POWERUP_VARIA_BIT = 0b00100000
 POWERUP_WAVBEAM_BIT = 0b01000000
 POWERUP_ICEBEAM_BIT = 0b10000000
-bytes[POWERUP_BYTE] = POWERUP_ICEBEAM_BIT | POWERUP_SCREWATTACK_BIT | POWERUP_HIGHJUMP_BIT
+bytes[POWERUP_BYTE] = POWERUP_ICEBEAM_BIT | POWERUP_SCREWATTACK_BIT | POWERUP_HIGHJUMP_BIT | POWERUP_LONGBEAM_BIT | POWERUP_MARUMARI_BIT | POWERUP_VARIA_BIT | POWERUP_BOMBS_BIT
+
+DOORS = [
+          { "byte": 0, "bit": 0b10000000 },
+          { "byte": 0, "bit": 0b00000000 },
+          { "byte": 0, "bit": 0b00010000 },
+          { "byte": 0, "bit": 0b00000100 },
+          { "byte": 1, "bit": 0b10000000 },
+          { "byte": 1, "bit": 0b00000100 },
+          { "byte": 2, "bit": 0b10000000 },
+          { "byte": 3, "bit": 0b00100000 },
+          { "byte": 3, "bit": 0b00000010 },
+          { "byte": 4, "bit": 0b01000000 },
+          { "byte": 4, "bit": 0b00100000 },
+          { "byte": 4, "bit": 0b00001000 },
+          { "byte": 4, "bit": 0b00000001 },
+          { "byte": 5, "bit": 0b10000000 },
+          { "byte": 5, "bit": 0b00010000 },
+          { "byte": 5, "bit": 0b00000010 },
+          { "byte": 6, "bit": 0b00010000 },
+          { "byte": 6, "bit": 0b00001000 },
+          { "byte": 6, "bit": 0b00000100 },
+        ]
+
+ENERGY_TANKS = [
+                 { "byte": 0, "bit": 0b00010000 },
+                 { "byte": 1, "bit": 0b00010000 },
+                 { "byte": 1, "bit": 0b00000010 },
+                 { "byte": 3, "bit": 0b01000000 },
+                 { "byte": 4, "bit": 0b00010000 },
+                 { "byte": 5, "bit": 0b00100000 },
+                 { "byte": 5, "bit": 0b00000100 },
+                 { "byte": 6, "bit": 0b00000001 },
+               ]
+
+ZEBETITE_DEFEATED = [
+                      { "byte": 6, "bit": 0b10000000 },
+                      { "byte": 6, "bit": 0b01000000 },
+                      { "byte": 6, "bit": 0b00100000 },
+                      { "byte": 7, "bit": 0b00000010 },
+                      { "byte": 7, "bit": 0b00000001 },
+                    ]
+
+MISSILE_CONTAINERS = [
+                       { "byte": 0, "bit": 0b00000010 },
+                       { "byte": 1, "bit": 0b01000000 },
+                       { "byte": 1, "bit": 0b00100000 },
+                       { "byte": 1, "bit": 0b00000001 },
+                       { "byte": 2, "bit": 0b01000000 },
+                       { "byte": 2, "bit": 0b00100000 },
+                       { "byte": 2, "bit": 0b00010000 },
+                       { "byte": 2, "bit": 0b00001000 },
+                       { "byte": 2, "bit": 0b00000100 },
+                       { "byte": 2, "bit": 0b00000010 },
+                       { "byte": 2, "bit": 0b00000001 },
+                       { "byte": 3, "bit": 0b10000000 },
+                       { "byte": 3, "bit": 0b00010000 },
+                       { "byte": 3, "bit": 0b00001000 },
+                       { "byte": 4, "bit": 0b10000000 },
+                       { "byte": 4, "bit": 0b00000100 },
+                       { "byte": 4, "bit": 0b00000010 },
+                       { "byte": 5, "bit": 0b01000000 },
+                       { "byte": 5, "bit": 0b00001000 },
+                       { "byte": 5, "bit": 0b00000001 },
+                       { "byte": 6, "bit": 0b00000010 },
+                     ]
+STATUS = {
+           "kraid_statue":     { "byte": 15, "bit": 0b10000000 },
+           "kraid_defeated":   { "byte": 15, "bit": 0b01000000 },
+           "ridley_statue":    { "byte": 15, "bit": 0b00100000 },
+           "ridley_defeated":  { "byte": 15, "bit": 0b00010000 },
+           "samus_swimsuit":   { "byte":  8, "bit": 0b10000000 },
+         }
+
+for d in DOORS:
+  bytes[d["byte"]] |= d["bit"]
+
+for tank in ENERGY_TANKS:
+  bytes[tank["byte"]] |= tank["bit"]
+
+for mc in MISSILE_CONTAINERS:
+  bytes[mc["byte"]] |= mc["bit"]
+
+for zd in ZEBETITE_DEFEATED:
+  bytes[zd["byte"]] |= zd["bit"]
+
+bytes[STATUS["kraid_statue"]["byte"]] |= STATUS["kraid_statue"]["bit"]
+bytes[STATUS["kraid_defeated"]["byte"]] |= STATUS["kraid_defeated"]["bit"]
+bytes[STATUS["ridley_statue"]["byte"]] |= STATUS["ridley_statue"]["bit"]
+bytes[STATUS["ridley_defeated"]["byte"]] |= STATUS["ridley_defeated"]["bit"]
 
 setChecksum(bytes)
 
