@@ -4,28 +4,30 @@ from pydantic import BaseModel
 PASSWORD_SIZE_BYTES = 18
 
 class QueryParams(BaseModel):
-  hasBombs: bool | None = False
-  hasHighJump: bool | None = False
-  hasLongBeam: bool | None = False
-  hasScrewAttack: bool | None = False
-  hasMaruMari: bool | None = False
-  hasVaria: bool | None = False
-  hasWaveBeam: bool | None = False
-  hasIceBeam: bool | None = False
+  bombs: bool | None = False
+  highJump: bool | None = False
+  longBeam: bool | None = False
+  screwAttack: bool | None = False
+  maruMari: bool | None = False
+  varia: bool | None = False
+  waveBeam: bool | None = False
+  iceBeam: bool | None = False
 
   swimsuitEnabled: bool | None = False
 
   ridleyDefeated: bool | None = False
   kraidDefeated: bool | None = False
-  missile_count: int | None = 0
+
+  missiles: int | None = 0
+  energyTanks: int | None = 0 
 
 def get_password(query: QueryParams):
   bytes = [0x00] * PASSWORD_SIZE_BYTES
 
 
-  if query.missile_count is not None:
+  if query.missiles is not None:
     MISSILE_BYTE = 10
-    bytes[MISSILE_BYTE] = int(query.missile_count)
+    bytes[MISSILE_BYTE] = int(query.missiles)
 
   POWERUP_BYTE = 9 
   POWERUP_BOMBS_BIT = 0b00000001
@@ -37,28 +39,28 @@ def get_password(query: QueryParams):
   POWERUP_WAVEBEAM_BIT = 0b01000000
   POWERUP_ICEBEAM_BIT = 0b10000000
 
-  if query.hasBombs:
+  if query.bombs:
     bytes[POWERUP_BYTE] |= POWERUP_BOMBS_BIT
 
-  if query.hasHighJump:
+  if query.highJump:
     bytes[POWERUP_BYTE] |= POWERUP_HIGHJUMP_BIT
 
-  if query.hasLongBeam:
+  if query.longBeam:
     bytes[POWERUP_BYTE] |= POWERUP_LONGBEAM_BIT
 
-  if query.hasScrewAttack:
+  if query.screwAttack:
     bytes[POWERUP_BYTE] |= POWERUP_SCREWATTACK_BIT
 
-  if query.hasMaruMari:
+  if query.maruMari:
     bytes[POWERUP_BYTE] |= POWERUP_MARUMARI_BIT
 
-  if query.hasVaria:
+  if query.varia:
     bytes[POWERUP_BYTE] |= POWERUP_VARIA_BIT
 
-  if query.hasWaveBeam:
+  if query.waveBeam:
     bytes[POWERUP_BYTE] |= POWERUP_WAVEBEAM_BIT
 
-  if query.hasIceBeam:
+  if query.iceBeam:
     bytes[POWERUP_BYTE] |= POWERUP_ICEBEAM_BIT
 
   DOORS = [
@@ -149,6 +151,14 @@ def get_password(query: QueryParams):
 #  bytes[STATUS["kraid_defeated"]["byte"]] |= STATUS["kraid_defeated"]["bit"]
 #  bytes[STATUS["ridley_statue"]["byte"]] |= STATUS["ridley_statue"]["bit"]
 #  bytes[STATUS["ridley_defeated"]["byte"]] |= STATUS["ridley_defeated"]["bit"]
+
+  for i in range(query.energyTanks):   
+    tank = ENERGY_TANKS[i]
+    bytes[tank["byte"]] |= tank["bit"]
+
+  for i in range(int(query.missiles / 5)):
+    mc = MISSILE_CONTAINERS[i]
+    bytes[mc["byte"]] |= mc["bit"]
 
   setChecksum(bytes)
 
