@@ -13,12 +13,16 @@ class QueryParams(BaseModel):
   waveBeam: bool | None = False
   iceBeam: bool | None = False
 
-  swimsuitEnabled: bool | None = False
+  swimsuit: bool | None = False
+  startRidley: bool | None = False
+  startKraid: bool | None = False
+  startNorfair: bool | None = False
 
-  ridleyDefeated: bool | None = False
-  kraidDefeated: bool | None = False
+  ridley: bool | None = False
+  kraid: bool | None = False
 
   missiles: int | None = 0
+  missileContainers: int | None = 0
   energyTanks: int | None = 0 
 
 def get_password(query: QueryParams):
@@ -62,6 +66,24 @@ def get_password(query: QueryParams):
 
   if query.iceBeam:
     bytes[POWERUP_BYTE] |= POWERUP_ICEBEAM_BIT
+
+  STARTLOCATION_BYTE = 8 
+  SWIMSUIT_BIT = 0b10000000
+  STARTRIDLEY_BIT = 0b00000100
+  STARTKRAID_BIT = 0b00000010
+  STARTNORFAIR_BIT = 0b00000001
+
+  if query.swimsuit:
+    bytes[STARTLOCATION_BYTE] |= SWIMSUIT_BIT
+
+  if query.startRidley:
+    bytes[STARTLOCATION_BYTE] |= STARTRIDLEY_BIT
+
+  if query.startKraid:
+    bytes[STARTLOCATION_BYTE] |= STARTKRAID_BIT
+
+  if query.startNorfair:
+    bytes[STARTLOCATION_BYTE] |= STARTNORFAIR_BIT
 
   DOORS = [
           { "byte": 0, "bit": 0b10000000 },
@@ -147,16 +169,19 @@ def get_password(query: QueryParams):
 #  for zd in ZEBETITE_DEFEATED:
 #    bytes[zd["byte"]] |= zd["bit"]
 
-#  bytes[STATUS["kraid_statue"]["byte"]] |= STATUS["kraid_statue"]["bit"]
-#  bytes[STATUS["kraid_defeated"]["byte"]] |= STATUS["kraid_defeated"]["bit"]
-#  bytes[STATUS["ridley_statue"]["byte"]] |= STATUS["ridley_statue"]["bit"]
-#  bytes[STATUS["ridley_defeated"]["byte"]] |= STATUS["ridley_defeated"]["bit"]
+  if query.kraid:
+    bytes[STATUS["kraid_statue"]["byte"]] |= STATUS["kraid_statue"]["bit"]
+    bytes[STATUS["kraid_defeated"]["byte"]] |= STATUS["kraid_defeated"]["bit"]
+  if query.ridley:
+    bytes[STATUS["ridley_statue"]["byte"]] |= STATUS["ridley_statue"]["bit"]
+    bytes[STATUS["ridley_defeated"]["byte"]] |= STATUS["ridley_defeated"]["bit"]
 
   for i in range(query.energyTanks):   
     tank = ENERGY_TANKS[i]
     bytes[tank["byte"]] |= tank["bit"]
 
-  for i in range(int(query.missiles / 5)):
+#  for i in range(int(query.missiles / 5)):
+  for i in range(int(query.missileContainers)):
     mc = MISSILE_CONTAINERS[i]
     bytes[mc["byte"]] |= mc["bit"]
 
