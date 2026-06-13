@@ -1,27 +1,23 @@
-  .inesprg 1   ; 1x 16KB PRG code
-  .ineschr 1   ; 1x  8KB CHR data
-  .inesmap 0   ; mapper 0 = NROM, no bank swapping
-  .inesmir 1   ; background mirroring
+  .inesprg 1   
+  .ineschr 1   
+  .inesmap 0   
+  .inesmir 1   
   
-
-;;;;;;;;;;;;;;;
-
-    
   .bank 0
   .org $C000 
 RESET:
-  SEI          ; disable IRQs
-  CLD          ; disable decimal mode
+  SEI          
+  CLD          
   LDX #$40
-  STX $4017    ; disable APU frame IRQ
+  STX $4017    
   LDX #$FF
-  TXS          ; Set up stack
-  INX          ; now X = 0
-  STX $2000    ; disable NMI
-  STX $2001    ; disable rendering
-  STX $4010    ; disable DMC IRQs
+  TXS          
+  INX          
+  STX $2000    
+  STX $2001    
+  STX $4010    
 
-vblankwait1:       ; First wait for vblank to make sure PPU is ready
+vblankwait1:       
   BIT $2002
   BPL vblankwait1
 
@@ -39,32 +35,25 @@ clrmem:
   INX
   BNE clrmem
    
-vblankwait2:      ; Second wait for vblank, PPU is ready after this
+vblankwait2:      
   BIT $2002
   BPL vblankwait2
 
-
 LoadPalettes:
-  LDA $2002             ; read PPU status to reset the high/low latch
+  LDA $2002             
   LDA #$3F
-  STA $2006             ; write the high byte of $3F00 address
+  STA $2006             
   LDA #$00
-  STA $2006             ; write the low byte of $3F00 address
-  LDX #$00              ; start out at 0
+  STA $2006             
+  LDX #$00              
 LoadPalettesLoop:
-  LDA palette, x        ; load data from address (palette + the value in x)
-                          ; 1st time through loop it will load palette+0
-                          ; 2nd time through loop it will load palette+1
-                          ; 3rd time through loop it will load palette+2
-                          ; etc
-  STA $2007             ; write to PPU
-  INX                   ; X = X + 1
-  CPX #$20              ; Compare X to hex $10, decimal 16 - copying 16 bytes = 4 sprites
-  BNE LoadPalettesLoop  ; Branch to LoadPalettesLoop if compare was Not Equal to zero
-                        ; if compare was equal to 32, keep going down
-
-
-
+  LDA palette, x        
+                         
+  STA $2007             
+  INX                   
+  CPX #$20              
+  BNE LoadPalettesLoop  
+                        
 LoadSprites:
   LDX #$00              
 LoadSpritesLoop:
@@ -73,8 +62,8 @@ LoadSpritesLoop:
   INX                   
   CPX #$10              
   BNE LoadSpritesLoop   
-                        
-           
+
+
 LoadBackground01:
   LDA $2002             
   LDA #$20
@@ -110,97 +99,89 @@ LoadBackgroundLoop03:
 
               
 LoadAttribute:
-  LDA $2002             ; read PPU status to reset the high/low latch
+  LDA $2002             
   LDA #$23
-  STA $2006             ; write the high byte of $23C0 address
+  STA $2006             
   LDA #$C0
-  STA $2006             ; write the low byte of $23C0 address
-  LDX #$00              ; start out at 0
+  STA $2006             
+  LDX #$00              
 LoadAttributeLoop:
-  LDA attribute, x      ; load data from address (attribute + the value in x)
-  STA $2007             ; write to PPU
-  INX                   ; X = X + 1
+  LDA attribute, x      
+  STA $2007             
+  INX                   
  ; CPX #$08              
   CPX #$20              
-  BNE LoadAttributeLoop  ; Branch to LoadAttributeLoop if compare was Not Equal to zero
-                        ; if compare was equal to 128, keep going down
+  BNE LoadAttributeLoop  
+                        
               
-  LDA #%10010000   ; enable NMI, sprites from Pattern Table 0, background from Pattern Table 1
+  LDA #%10010000   
   STA $2000
 
-  LDA #%00011110   ; enable sprites, enable background, no clipping on left side
+  LDA #%00011110  
   STA $2001
 
 Forever:
-  JMP Forever     ;jump back to Forever, infinite loop
+  JMP Forever     
 
 NMI:
   LDA #$00
-  STA $2003       ; set the low byte (00) of the RAM address
+  STA $2003       
   LDA #$02
-  STA $4014       ; set the high byte (02) of the RAM address, start the transfer
+  STA $4014       
 
 
 LatchController:
   LDA #$01
   STA $4016
   LDA #$00
-  STA $4016       ; tell both the controllers to latch buttons
+  STA $4016       
 
 
 ReadA: 
-  LDA $4016       ; player 1 - A
-  AND #%00000001  ; only look at bit 0
-  BEQ ReadADone   ; branch to ReadADone if button is NOT pressed (0)
-                  ; add instructions here to do something when button IS pressed (1)
-  LDA $0203       ; load sprite X position
-  CLC             ; make sure the carry flag is clear
-  ADC #$01        ; A = A + 1
-  STA $0203       ; save sprite X position
-ReadADone:        ; handling this button is done
+  LDA $4016       
+  AND #%00000001  
+  BEQ ReadADone   
+                  
+  LDA $0203       
+  CLC             
+  ADC #$01        
+  STA $0203       
+ReadADone:        
   
 
 ReadB: 
-  LDA $4016       ; player 1 - B
-  AND #%00000001  ; only look at bit 0
-  BEQ ReadBDone   ; branch to ReadBDone if button is NOT pressed (0)
-                  ; add instructions here to do something when button IS pressed (1)
-  LDA $0203       ; load sprite X position
-  SEC             ; make sure carry flag is set
-  SBC #$01        ; A = A - 1
-  STA $0203       ; save sprite X position
-ReadBDone:        ; handling this button is done
+  LDA $4016       
+  AND #%00000001  
+  BEQ ReadBDone   
+                  
+  LDA $0203       
+  SEC             
+  SBC #$01        
+  STA $0203       
+ReadBDone:        
 
-
-  ;;This is the PPU clean up section, so rendering the next frame starts properly.
-  LDA #%10010000   ; enable NMI, sprites from Pattern Table 0, background from Pattern Table 1
+  LDA #%10010000   
   STA $2000
-  LDA #%00011110   ; enable sprites, enable background, no clipping on left side
+  LDA #%00011110   
   STA $2001
-  LDA #$00        ;;tell the ppu there is no background scrolling
+  LDA #$00        
   STA $2005
   STA $2005
   
-  RTI             ; return from interrupt
+  RTI             
  
-;;;;;;;;;;;;;;  
-  
-  
-  
   .bank 1
   .org $E000
-palette:
-  .db $0f,$37,$27,$07,  $0f,$2C,$1A,$15,  $22,$3C,$2C,$1C,  $22,$38,$20,$10   ;;background palette
-  .db $0f,$1C,$15,$14,  $0f,$02,$38,$3C,  $0f,$1C,$15,$14,  $0f,$02,$38,$3C   ;;sprite palette
 
+palette:
+  .db $0f,$35,$28,$07,  $0f,$2C,$1A,$16,  $0f,$0f,$0f,$0f,  $0f,$0f,$0f,$0f
+  .db $0f,$0f,$0f,$0f,  $0f,$0f,$0f,$0f,  $0f,$0f,$0f,$0f,  $0f,$0f,$0f,$0f   
 
 sprites:
-     ;vert tile attr horiz
-  .db $80, $32, $00, $80   ;sprite 0
-  .db $80, $33, $00, $88   ;sprite 1
-  .db $88, $34, $00, $80   ;sprite 2
-  .db $88, $35, $00, $88   ;sprite 3
-
+  .db $80, $32, $00, $80
+  .db $80, $33, $00, $88
+  .db $88, $34, $00, $80
+  .db $88, $35, $00, $88
 
 background01:
   .db $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
@@ -222,25 +203,24 @@ background01:
   .db $00,$00,$00,$00,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$1A,$1B
   .db $1C,$1D,$1E,$1F,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 
-  .db $00,$00,$00,$00,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$2A,$2B
-  .db $2C,$2D,$2E,$2F,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+  .db $00,$00,$00,$00,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$00,$00
+  .db $00,$00,$00,$00,$2A,$2B,$2C,$2D,$2E,$2F,$00,$00,$00,$00,$00,$00
 
-  .db $00,$00,$00,$00,$30,$31,$32,$33,$34,$35,$36,$37,$38,$39,$3A,$3B
-  .db $3C,$3D,$3E,$3F,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-
-
+  .db $00,$00,$00,$00,$30,$31,$32,$33,$34,$35,$36,$37,$38,$39,$00,$00
+  .db $00,$00,$00,$00,$3A,$3B,$3C,$3D,$3E,$3F,$00,$00,$00,$00,$00,$00
+  
 background02:
-  .db $00,$00,$00,$00,$40,$41,$42,$43,$44,$45,$46,$47,$48,$49,$4A,$4B
-  .db $4C,$4D,$4E,$4F,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+  .db $00,$00,$00,$00,$40,$41,$42,$43,$44,$45,$46,$47,$48,$49,$00,$00
+  .db $00,$00,$00,$00,$4A,$4B,$4C,$4D,$4E,$4F,$00,$00,$00,$00,$00,$00
 
-  .db $00,$00,$00,$00,$50,$51,$52,$53,$54,$55,$56,$57,$58,$59,$5A,$5B
-  .db $5C,$5D,$5E,$5F,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+  .db $00,$00,$00,$00,$50,$51,$52,$53,$54,$55,$56,$57,$58,$59,$00,$00
+  .db $00,$00,$00,$00,$5A,$5B,$5C,$5D,$5E,$5F,$00,$00,$00,$00,$00,$00
 
-  .db $00,$00,$00,$00,$60,$61,$62,$63,$64,$65,$66,$67,$68,$69,$6A,$6B
-  .db $6C,$6D,$6E,$6F,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+  .db $00,$00,$00,$00,$60,$61,$62,$63,$64,$65,$66,$67,$68,$69,$00,$00
+  .db $00,$00,$00,$00,$6A,$6B,$6C,$6D,$6E,$6F,$00,$00,$00,$00,$00,$00
 
-  .db $00,$00,$00,$00,$70,$71,$72,$73,$74,$75,$76,$77,$78,$79,$7A,$7B
-  .db $7C,$7D,$7E,$7F,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+  .db $00,$00,$00,$00,$70,$71,$72,$73,$74,$75,$76,$77,$78,$79,$00,$00
+  .db $00,$00,$00,$00,$7A,$7B,$7C,$7D,$7E,$7F,$00,$00,$00,$00,$00,$00
 
 
   .db $00,$00,$00,$00,$80,$81,$82,$83,$84,$85,$86,$87,$88,$89,$8A,$8B
@@ -286,23 +266,20 @@ background03:
 
 attribute:
    .db %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000
-   .db %00000000, %00000000, %00000000, %01000000, %01010101, %00000000, %00000000, %00000000
+   .db %00000000, %00000000, %00000000, %00000000, %01000000, %01010101, %01010101, %00000000
 
-   .db %00000000, %00000000, %00000000, %01000100, %01010101, %00000000, %00000000, %00000000
-   .db %00000000, %00000000, %00000000, %01000000, %01010101, %00000000, %00000000, %00000000
+   .db %00000000, %00000000, %00000000, %01000100, %01010101, %01010101, %01010101, %00000000
+   .db %00000000, %00000000, %00000000, %01000000, %01010101, %01010101, %01010101, %00000000
 
 
-  .org $FFFA     ;first of the three vectors starts here
-  .dw NMI        ;when an NMI happens (once per frame if enabled) the 
-                   ;processor will jump to the label NMI:
-  .dw RESET      ;when the processor first turns on or is reset, it will jump
-                   ;to the label RESET:
-  .dw 0          ;external interrupt IRQ is not used in this tutorial
-  
-  
-;;;;;;;;;;;;;;  
+  .org $FFFA
+  .dw NMI   
+            
+  .dw RESET 
+            
+  .dw 0     
   
   
   .bank 2
   .org $0000
-  .incbin "knox.chr"   ;includes 8KB graphics file from SMB1
+  .incbin "knox.chr"
