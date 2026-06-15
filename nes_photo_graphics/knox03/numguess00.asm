@@ -6,14 +6,13 @@
 ;game variables  
   .rsset $0000
 
-gamestate        .rs 1
-numsecret1       .rs 1
-numsecret2       .rs 1
-numguess1        .rs 1
-numguess2        .rs 1
-numguesscount    .rs 1
-buttons1         .rs 1
-buttons1previous .rs 1
+gamestate       .rs 1
+numsecret1      .rs 1
+numsecret2      .rs 1
+numguess1       .rs 1
+numguess2       .rs 1
+numguesscount   .rs 1
+buttons1        .rs 1
 
 STATETITLE = $00
 STATEGUESS = $01
@@ -174,10 +173,6 @@ GameEngine:
   LDA gamestate
   CMP #$02
   BEQ EngineInput2
-
-  LDA gamestate
-  CMP #$03
-  BEQ EngineInput3
 GameEngineDone:
 
   RTI  
@@ -185,8 +180,9 @@ GameEngineDone:
 EngineTitle:
   JSR RandomizeSecret
 
+
   LDA buttons1
-  CMP #$10           ; START button = 16
+  CMP #$10
   BNE GameEngineDone
 ;  JMP GameEngineDone
   LDA #$01
@@ -194,91 +190,10 @@ EngineTitle:
   JMP GameEngineDone
 
 EngineInput1:
-  LDA buttons1previous
-  CMP #$00
-  BNE GameEngineDone
-
-EngineInput1A:
-  LDA buttons1
-  CMP #$80           ; A button = 128
-  BNE EngineInput1ADone
-
-  LDA #$02
-  STA gamestate
-EngineInput1ADone:
-
-EngineInput1Up:
-  LDA buttons1
-  CMP #$08           ; Up button = 8
-  BNE EngineInput1UpDone
-
-  LDA numguess1
-  CLC
-  ADC #$01
-  STA numguess1
-  CMP #$0a
-  BNE EngineInput1UpDone
-  LDA #$00
-  STA numguess1
-EngineInput1UpDone:
-
   JMP GameEngineDone
 
 EngineInput2:
-  LDA buttons1previous
-  CMP #$00
-  BNE GameEngineDone
-
-EngineInput2A:
-  LDA buttons1
-  CMP #$80           ; A button = 128
-  BNE EngineInput2ADone
-
-;  LDA #$02
-;  STA numguess2
-
-  LDA #$03
-  STA gamestate
-EngineInput2ADone:
-
-EngineInput2Up:
-  LDA buttons1
-  CMP #$08           ; Up button = 8
-  BNE EngineInput2UpDone
-
-  LDA numguess2
-  CLC
-  ADC #$01
-  STA numguess2
-  CMP #$0a
-  BNE EngineInput2UpDone
-  LDA #$00
-  STA numguess2
-EngineInput2UpDone:
-
   JMP GameEngineDone
-
-
-
-
-EngineInput3:
-  LDA buttons1previous
-  CMP #$00
-  BNE GameEngineDone
-
-  LDA buttons1
-  CMP #$80           ; A button = 128
-  BNE GameEngineDone
-
-  LDA #$00
-  STA numguess1
-  STA numguess2
-
-  LDA #$01
-  STA gamestate
-  JMP GameEngineDone
-
-
 
 ;continually increment two values 0 to 9
 ;until the user presses start
@@ -308,9 +223,6 @@ RandomizeDone:
   RTS
 
 ReadController1:
-  LDA buttons1
-  STA buttons1previous
-
   LDA #$01
   STA $4016
   LDA #$00
@@ -323,7 +235,7 @@ ReadController1Loop:
   DEX
   BNE ReadController1Loop
   RTS
-
+           
  
   .bank 1
   .org $E000
@@ -355,9 +267,6 @@ strpressstart:
 
 strgensecnum:
   .db $10,$0e,$17,$0e,$1b,$0a,$1d,$12,$17,$10,$24,$1c,$0e,$0c,$1b,$0e,$1d,$24,$17,$1e,$16,$0b,$0e,$1b
-
-strguessnum:
-  .db $10,$1e,$0e,$1c,$1c,$24,$17,$1e,$16,$0b,$0e,$1b
 
 attribute:
    .db %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000
@@ -404,6 +313,7 @@ TextLoop02:
   CPX #$0b
   BNE TextLoop02
 
+
 ;text: secret number
 ;first digit
     LDA $2002
@@ -419,33 +329,21 @@ TextLoop02:
   LDA numsecret2
   STA $2007  
 
+
 ;text: guess number
-  LDA $2002             
-  LDA #$20
-  STA $2006             
-  LDA #$e4  ;row 8 column 4
-  STA $2006             
-  LDX #$00              
-TextLoop03:
-  LDA strguessnum, x
-  STA $2007             
-  INX                   
-  CPX #$0c
-  BNE TextLoop03
+;first digit
+;    LDA $2002
+;    LDA #$20
+;    STA $2006
+;    LDA #$58
+;    STA $2006
 
-;text: numguess1 (first digit)
-    LDA $2002
-    LDA #$21
-    STA $2006
-    LDA #$04
-    STA $2006
+;    LDA numguess1
+;    STA $2007
 
-    LDA numguess1
-    STA $2007
-
-;text; numguess2 (second digit)
-  LDA numguess2
-  STA $2007  
+;second digit
+;  LDA numguess2
+;  STA $2007  
 
 
     RTS
