@@ -12,6 +12,7 @@ numsecret2      .rs 1
 numguess1       .rs 1
 numguess2       .rs 1
 numguesscount   .rs 1
+buttons1        .rs 1
 
 STATETITLE = $00
 STATEGUESS = $01
@@ -86,18 +87,15 @@ LoadBackground01:
   STA $2006             
   LDX #$00              
 LoadBackgroundLoop01:
-;  LDA background01, x     
   LDA #$24
   STA $2007             
   INX                   
   CPX #$00              
   BNE LoadBackgroundLoop01  
-                        
 
 LoadBackground02:
   LDX #$00             
 LoadBackgroundLoop02:
-;  LDA background02, x  
   LDA #$24
   STA $2007            
   INX                  
@@ -107,7 +105,6 @@ LoadBackgroundLoop02:
 LoadBackground03:
   LDX #$00             
 LoadBackgroundLoop03:
-;  LDA background03, x  
   LDA #$24
   STA $2007            
   INX                  
@@ -137,7 +134,6 @@ LoadAttributeLoop:
  ; CPX #$08              
   CPX #$40              
   BNE LoadAttributeLoop  
-                        
               
   LDA #%10010000   
   STA $2000
@@ -154,9 +150,7 @@ NMI:
   LDA #$02
   STA $4014 
 
-  JSR RandomizeSecret
   JSR DrawScore
-
   LDA #%10010000   
 ;  LDA #%10000000   
   STA $2000
@@ -165,11 +159,44 @@ NMI:
   LDA #$00        
   STA $2005
   STA $2005
-  
+  JSR ReadController1
+
+GameEngine:
+  LDA gamestate
+  CMP #$00
+  BEQ EngineTitle
+
+  LDA gamestate
+  CMP #$01
+  BEQ EngineInput1
+
+  LDA gamestate
+  CMP #$02
+  BEQ EngineInput2
+GameEngineDone:
+
   RTI  
 
+EngineTitle:
+  JSR RandomizeSecret
 
 
+  LDA buttons1
+  CMP #$10
+  BNE GameEngineDone
+;  JMP GameEngineDone
+  LDA #$01
+  STA gamestate
+  JMP GameEngineDone
+
+EngineInput1:
+  JMP GameEngineDone
+
+EngineInput2:
+  JMP GameEngineDone
+
+;continually increment two values 0 to 9
+;until the user presses start
 RandomizeSecret:
   LDA numsecret1
   CLC
@@ -177,7 +204,7 @@ RandomizeSecret:
   STA numsecret1
 
   CMP #$0a
-  BNE RandomizeSecret1
+  BNE RandomizeDone
 
   LDA #$00
   STA numsecret1
@@ -187,45 +214,27 @@ RandomizeSecret:
   STA numsecret2
 
   CMP #$0a
-  BNE RandomizeSecret1
+  BNE RandomizeDone
   
   LDA #$00
   STA numsecret2
 
-RandomizeSecret1:
-
+RandomizeDone:
   RTS
 
-LatchController:
+ReadController1:
   LDA #$01
   STA $4016
   LDA #$00
-  STA $4016       
-
-
-ReadA: 
-  LDA $4016       
-  AND #%00000001  
-  BEQ ReadADone   
-                  
-  LDA $0203       
-  CLC             
-  ADC #$01        
-  STA $0203       
-ReadADone:        
-  
-
-ReadB: 
-  LDA $4016       
-  AND #%00000001  
-  BEQ ReadBDone   
-                  
-  LDA $0203       
-  SEC             
-  SBC #$01        
-  STA $0203       
-ReadBDone:        
-
+  STA $4016
+  LDX #$08
+ReadController1Loop:
+  LDA $4016
+  LSR A            ; bit0 -> Carry
+  ROL buttons1     ; bit0 <- Carry
+  DEX
+  BNE ReadController1Loop
+  RTS
            
  
   .bank 1
@@ -253,140 +262,11 @@ sprites:
   .db $C0, $10, $02, $a0
   .db $C0, $17, $02, $a8
 
+strpressstart:
+  .db $19,$1b,$0e,$1c,$1c,$24,$1c,$1d,$0a,$1b,$1d
 
-background01:
-;ROW 0 (offscreen NTSC)
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-
-;ROW 1
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-
-;ROW 2
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-
-;ROW 3
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-
-;ROW 4
-;KNOX GAME DESIGN
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $14,$17,$18,$21,$24,$10,$0a,$16
-  .db $0e,$24,$0d,$0e,$1c,$12,$10,$17
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-
-;ROW 5
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-
-;ROW 6
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-
-;ROW 7
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-
-background02:
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-
-background03:
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-  .db $24,$24,$24,$24,$24,$24,$24,$24
-
-
+strgensecnum:
+  .db $10,$0e,$17,$0e,$1b,$0a,$1d,$12,$17,$10,$24,$1c,$0e,$0c,$1b,$0e,$1d,$24,$17,$1e,$16,$0b,$0e,$1b
 
 attribute:
    .db %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000
@@ -402,15 +282,44 @@ attribute:
    .db %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000
 
 
-
 DrawScore:
 
-;secret number
+
+;text: GENERATING SECRET NUMBER
+  LDA $2002             
+  LDA #$20
+  STA $2006             
+  LDA #$44  ;row 3 column 4
+  STA $2006             
+  LDX #$00              
+TextLoop01:
+  LDA strgensecnum, x
+  STA $2007             
+  INX                   
+  CPX #$18
+  BNE TextLoop01  
+
+;text: PRESS START
+  LDA $2002             
+  LDA #$20
+  STA $2006             
+  LDA #$64  ;row 4 column 4
+  STA $2006             
+  LDX #$00              
+TextLoop02:
+  LDA strpressstart, x
+  STA $2007             
+  INX                   
+  CPX #$0b
+  BNE TextLoop02
+
+
+;text: secret number
 ;first digit
     LDA $2002
     LDA #$20
     STA $2006
-    LDA #$48
+    LDA #$A4  ;row 6 column 4
     STA $2006
 
     LDA numsecret1
@@ -421,7 +330,7 @@ DrawScore:
   STA $2007  
 
 
-;guess number
+;text: guess number
 ;first digit
 ;    LDA $2002
 ;    LDA #$20
@@ -437,7 +346,6 @@ DrawScore:
 ;  STA $2007  
 
 
-
     RTS
 
 
@@ -451,7 +359,4 @@ DrawScore:
   
   .bank 2
   .org $0000
-  .incbin "numguess.chr"
-
-
-  
+  .incbin "numguess.chr"  
