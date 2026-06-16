@@ -359,6 +359,9 @@ strgensecnum:
 strguessnum:
   .db $10,$1e,$0e,$1c,$1c,$24,$17,$1e,$16,$0b,$0e,$1b
 
+strcheck:
+  .db $0c,$11,$0e,$0c,$14
+
 attribute:
    .db %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000
    .db %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000
@@ -447,6 +450,87 @@ TextLoop03:
   LDA numguess2
   STA $2007  
 
+;clear cursor
+  LDA $2002
+  LDA #$21
+  STA $2006
+  LDA #$24
+  STA $2006
+
+  LDA #$24 ; blank
+  STA $2007
+  STA $2007
+
+;clear text
+  LDA $2002
+  LDA #$21
+  STA $2006
+  LDA #$84
+  STA $2006
+
+  LDA #$24 ; blank
+
+  LDX #$00
+ClearTextLoop:
+  STA $2007
+  INX                   
+  CPX #$0a
+  BNE ClearTextLoop
+
+
+
+
+
+;cursor
+Cursor1:
+  LDA gamestate
+  CMP #$01
+  BNE Cursor1Done
+
+  LDA $2002
+  LDA #$21
+  STA $2006
+  LDA #$24
+  STA $2006
+
+  LDA #$28 ; cursor
+  STA $2007
+Cursor1Done:
+
+
+Cursor2:
+  LDA gamestate
+  CMP #$02
+  BNE Cursor2Done
+
+  LDA $2002
+  LDA #$21
+  STA $2006
+  LDA #$25
+  STA $2006
+
+  LDA #$28 ; cursor
+  STA $2007
+Cursor2Done:
+
+Check:
+  LDA gamestate
+  CMP #$03
+  BNE CheckDone
+
+  LDA $2002             
+  LDA #$21
+  STA $2006             
+  LDA #$84
+  STA $2006             
+  LDX #$00              
+CheckLoop:
+  LDA strcheck, x
+  STA $2007             
+  INX                   
+  CPX #$05
+  BNE CheckLoop
+CheckDone:
 
     RTS
 
