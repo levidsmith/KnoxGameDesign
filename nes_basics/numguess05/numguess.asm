@@ -16,6 +16,7 @@ numsecret2       .rs 1
 numguess1        .rs 1
 numguess2        .rs 1
 numguesscount    .rs 1
+result           .rs 1
 buttons1         .rs 1
 buttons1previous .rs 1
 
@@ -171,17 +172,23 @@ GameEngine:
 
   LDA gamestate
   CMP #$01
-  BEQ EngineInput1
+  BEQ EngineState1
 
   LDA gamestate
   CMP #$02
-  BEQ EngineInput2
+  BEQ EngineState2
 
   LDA gamestate
   CMP #$03
-  BEQ EngineInput3
+  BEQ EngineState3
+
+  LDA gamestate
+  CMP #$04
+  BEQ EngineState4
+
 GameEngineDone:
   RTI  
+
 
 EngineTitle:
   JSR RandomizeSecret
@@ -193,76 +200,87 @@ EngineTitle:
   STA gamestate
   JMP GameEngineDone
 
-EngineInput1:
+EngineState1:
   LDA buttons1previous
   CMP #$00
   BNE GameEngineDone
 
-EngineInput1A:
+EngineState1A:
   LDA buttons1
   CMP #$80           ; A button = 128
-  BNE EngineInput1ADone
+  BNE EngineState1ADone
 
   LDA #$02
   STA gamestate
-EngineInput1ADone:
+EngineState1ADone:
 
-EngineInput1Up:
+EngineState1Up:
   LDA buttons1
   CMP #$08           ; Up button = 8
-  BNE EngineInput1UpDone
+  BNE EngineState1UpDone
 
   LDA numguess1
   CLC
   ADC #$01
   STA numguess1
   CMP #$0a
-  BNE EngineInput1UpDone
+  BNE EngineState1UpDone
   LDA #$00
   STA numguess1
-EngineInput1UpDone:
-
+EngineState1UpDone:
   JMP GameEngineDone
 
-EngineInput2:
+EngineState2:
   LDA buttons1previous
   CMP #$00
   BNE GameEngineDone
 
-EngineInput2A:
+EngineState2A:
   LDA buttons1
   CMP #$80           ; A button = 128
-  BNE EngineInput2ADone
+  BNE EngineState2ADone
 
   LDA #$03
   STA gamestate
-EngineInput2ADone:
+EngineState2ADone:
 
-EngineInput2Up:
+EngineState2Up:
   LDA buttons1
   CMP #$08           ; Up button = 8
-  BNE EngineInput2UpDone
+  BNE EngineState2UpDone
 
   LDA numguess2
   CLC
   ADC #$01
   STA numguess2
   CMP #$0a
-  BNE EngineInput2UpDone
+  BNE EngineState2UpDone
   LDA #$00
   STA numguess2
-EngineInput2UpDone:
-
+EngineState2UpDone:
   JMP GameEngineDone
 
-EngineInput3:
+
+EngineState3:
+  JSR Check
+
+  LDA #$04
+  STA gamestate
+
+EngineState3Done:
+  JMP GameEngineDone
+
+
+EngineState4:
+  JSR DisplayResult
+
   LDA buttons1previous
   CMP #$00
-  BNE GameEngineDone
+  BNE EngineState4Done
 
   LDA buttons1
   CMP #$80           ; A button = 128
-  BNE GameEngineDone
+  BNE EngineState4Done
 
   LDA #$00
   STA numguess1
@@ -270,9 +288,8 @@ EngineInput3:
 
   LDA #$01
   STA gamestate
+EngineState4Done:
   JMP GameEngineDone
-
-
 
 ;continually increment two values 0 to 9
 ;until the user presses start
@@ -316,6 +333,7 @@ ReadController1Loop:
   ROL buttons1     ; bit0 <- Carry
   DEX
   BNE ReadController1Loop
+ReadController1Done:  
   RTS
 
  
@@ -357,13 +375,16 @@ strcheck:
   .db $0c,$11,$0e,$0c,$14
 
 strhigher:
-  .db $11,$12,$10,$11,$0e,$1b
+  .db $11,$12,$10,$11,$0e,$1b,$24,$24
 
 strlower:
-  .db $15,$18,$20,$0e,$1b
+  .db $15,$18,$20,$0e,$1b,$24,$24,$24
 
 strcorrect:
-  .db $0c,$18,$1b,$1b,$0e,$0c,$1d
+  .db $0c,$18,$1b,$1b,$0e,$0c,$1d,$24
+
+strguesses:
+  .db $10,$1e,$0e,$1c,$1c,$0e,$1c
 
 attribute:
    .db %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000
@@ -452,6 +473,31 @@ TextLoop03:
   LDA numguess2
   STA $2007  
 
+;text: guesses
+  LDA $2002             
+  LDA #$21
+  STA $2006             
+  LDA #$44  ;row 10 column 4
+  STA $2006             
+  LDX #$00              
+TextLoop04:
+  LDA strguesses, x
+  STA $2007             
+  INX                   
+  CPX #$07
+  BNE TextLoop04
+
+;text: guess count number
+  LDA $2002             
+  LDA #$21
+  STA $2006             
+  LDA #$50  ;row 10 column 4
+  STA $2006             
+  LDX #$00              
+
+  LDA numguesscount
+  STA $2007             
+
 ;clear cursor
   LDA $2002
   LDA #$21
@@ -511,70 +557,123 @@ Cursor2:
   STA $2007
 Cursor2Done:
 
+DrawScoreDone:
+  RTS
+
 Check:
-  LDA gamestate
-  CMP #$03
-  BNE CheckDone
+
+CheckTensDigit:
+;  LDA gamestate
+;  CMP #$03
+;  BNE CheckDone
 
   LDA numguess1
   CMP numsecret1
-  BEQ DisplayCorrect
-  BCC DisplayHigher
-  BCS DisplayLower
+  BEQ CheckOnesDigit
+  BCC ResultHigher
+  BCS ResultLower
+CheckTensDigitDone:
+
+CheckOnesDigit:
+  LDA numguess2
+  CMP numsecret2
+  BEQ ResultCorrect
+  BCC ResultHigher
+  BCS ResultLower
+CheckOnesDigitDone:
+
+ResultCorrect:
+  LDA #$00
+  STA result
+
+  LDA #$04
+  STA gamestate
+  JMP CheckDone
+ResultCorrectDone:
+
+ResultHigher:
+  LDA #$01
+  STA result
+
+  JSR IncrementGuessCount
+  LDA #$04
+  STA gamestate
+  JMP CheckDone
+ResultHigherDone:
+
+ResultLower:
+  LDA #$02
+  STA result
+
+  JSR IncrementGuessCount
+  LDA #$04
+  STA gamestate
+  JMP CheckDone
+ResultLowerDone:
 
 CheckDone:
   RTS
 
-DisplayCorrect:
-  LDA $2002             
-  LDA #$21
-  STA $2006             
-  LDA #$84
-  STA $2006             
-  LDX #$00              
-DisplayCorrectLoop:
-  LDA strcorrect, x
-  STA $2007             
-  INX                   
-  CPX #$07
-  BNE DisplayCorrectLoop
 
-  RTS
+DisplayResult:
+  LDA result
+  
+  CMP #$00
+  BEQ DisplayCorrect
+
+  CMP #$01
+  BEQ DisplayHigher
+
+  CMP #$02
+  BEQ DisplayLower
+  
+
+DisplayCorrect:
+  LDX #$00
+DisplayCorrectLoop:  
+  LDA strcorrect, x
+  STA $2007
+  INX
+  CPX #$08
+  BNE DisplayCorrectLoop
 DisplayCorrectDone:
+  JMP DisplayResultDone
 
 DisplayHigher:
-  LDA $2002             
-  LDA #$21
-  STA $2006             
-  LDA #$84
-  STA $2006             
   LDX #$00              
 DisplayHigherLoop:
   LDA strhigher, x
   STA $2007             
   INX                   
-  CPX #$06
+  CPX #$08
   BNE DisplayHigherLoop
-
-  RTS
 DisplayHigherDone:
+  JMP DisplayResultDone
 
 DisplayLower:
-  LDA $2002             
-  LDA #$21
-  STA $2006             
-  LDA #$84
-  STA $2006             
   LDX #$00              
 DisplayLowerLoop:
   LDA strlower, x
   STA $2007             
   INX                   
-  CPX #$05
+  CPX #$08
   BNE DisplayLowerLoop
-
-  RTS
 DisplayLowerDone:
+  JMP DisplayResultDone
+
+DisplayResultDone:
+  RTS
+
+
+IncrementGuessCount:
+  LDA numguesscount
+  CLC
+  ADC #$01
+
+  STA numguesscount
+IncrementGuessCountDone:
+  RTS
+
 
   .org $FFFA
   .dw NMI   

@@ -511,18 +511,26 @@ Cursor2:
   STA $2007
 Cursor2Done:
 
-Check:
+CheckTensDigit:
   LDA gamestate
   CMP #$03
-  BNE CheckDone
+  BNE CheckOnesDigitDone
 
   LDA numguess1
   CMP numsecret1
+  BEQ CheckOnesDigit
+  BCC DisplayHigher
+  BCS DisplayLower
+CheckTensDigitDone:
+
+CheckOnesDigit:
+  LDA numguess2
+  CMP numsecret2
   BEQ DisplayCorrect
   BCC DisplayHigher
   BCS DisplayLower
+CheckOnesDigitDone:
 
-CheckDone:
   RTS
 
 DisplayCorrect:
