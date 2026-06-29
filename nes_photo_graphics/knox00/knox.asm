@@ -1,3 +1,6 @@
+; Original template code from NerdyNights tutorial
+; https://nerdy-nights.nes.science/
+; Modified photo graphics demo 2026 Levi D. Smith for Knox Game Design 
   .inesprg 1   ; 1x 16KB PRG code
   .ineschr 1   ; 1x  8KB CHR data
   .inesmap 0   ; mapper 0 = NROM, no bank swapping

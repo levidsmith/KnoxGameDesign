@@ -1,3 +1,6 @@
+; Original template code from NerdyNights tutorial
+; https://nerdy-nights.nes.science/
+; Modified photo graphics demo 2026 Levi D. Smith for Knox Game Design
   .inesprg 1   
   .ineschr 1   
   .inesmap 0   
