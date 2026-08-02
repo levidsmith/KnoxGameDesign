@@ -134,7 +134,6 @@ LoadAttributeLoop:
   LDA attribute, x      
   STA $2007             
   INX                   
- ; CPX #$08              
   CPX #$40              
   BNE LoadAttributeLoop  
               
@@ -155,7 +154,6 @@ NMI:
 
   JSR DrawScore
   LDA #%10010000   
-;  LDA #%10000000   
   STA $2000
   LDA #%00011110   
   STA $2001
@@ -183,11 +181,9 @@ GameEngineDone:
 EngineTitle:
   JSR RandomizeSecret
 
-
   LDA buttons1
-  CMP #$10
+  CMP #$10            ;$10 = Start button
   BNE GameEngineDone
-;  JMP GameEngineDone
   LDA #$01
   STA gamestate
   JMP GameEngineDone
