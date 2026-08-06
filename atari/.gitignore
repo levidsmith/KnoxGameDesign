@@ -2,3 +2,5 @@ dasm-2.20.14.1-win-x64/
 z26_407_win10/
 *.a26
 test.txt
+temp/
+out/
