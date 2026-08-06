@@ -32,29 +32,30 @@ Clear           sta 0,x
 
       ;------------------------------------------------
 
+      ;PATTERN2 binary is backwards
 	  
 	  ; K PATTERN: -.-
-               lda #235
+               lda #%11101011
                sta PATTERN1_K
-               lda #1
+               lda #%00000001
                sta PATTERN2_K
 
 	  ; N PATTERN: -.
-               lda #232
+               lda #%11101000
                sta PATTERN1_N
-               lda #0
+               lda #%00000000
                sta PATTERN2_N
 
 	  ; O PATTERN: ---
-               lda #238
+               lda #%11101110
                sta PATTERN1_O
-               lda #7
+               lda #%00000111
                sta PATTERN2_O
 
 	  ; X PATTERN: -..-
-               lda #234
+               lda #%11101010
                sta PATTERN1_X
-               lda #7
+               lda #%00000111
                sta PATTERN2_X
 
 
