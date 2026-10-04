@@ -1,0 +1,4 @@
+*.o
+*.sav
+*.gb
+set_path.sh
