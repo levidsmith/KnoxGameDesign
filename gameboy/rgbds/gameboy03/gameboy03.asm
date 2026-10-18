@@ -41,6 +41,11 @@ EntryPoint:
         ld [wCurKeys], a
         ld [wNewKeys], a
 
+DEF MODE_TITLE EQU 1
+DEF MODE_GAME EQU 2
+        ld a, MODE_TITLE
+        ld [wMode], a
+        
 WaitVBlank:
 	ld a, [rLY]
 	cp 144
@@ -142,11 +147,29 @@ CheckStart:
         jp z, InputDone
 Start:
         call SetSecret
+        ld a, MODE_GAME
+        ld [wMode], a
 
 InputDone:
 
 	call IncrementCounter
-        call UpdateTileMap
+
+        ld a, [wMode]
+        cp a, MODE_TITLE        
+        jp z, DisplayTitleMode 
+        cp a, MODE_GAME        
+        jp z, DisplayGameMode 
+
+DisplayTitleMode:
+        call DisplayTitleText 
+        jp DisplayModeDone 
+
+DisplayGameMode:
+        call DisplayGameText 
+        jp DisplayModeDone 
+
+DisplayModeDone:
+
 
 NotInVBlank:
 	jr Done
@@ -179,39 +202,52 @@ CounterResetTens:
 CounterResetTensDone:
     ret
 
-UpdateTileMap:
+DisplayTitleText:
+        ld hl, $9842
+        ld bc, StrPressStart
+        call MemCopy
+
+DisplayTitleTextDone:
+    ret
+
+DisplayGameText:
         ;Display new counter digits	
-	ld hl, $9840
-	ld a, [wCounterDigitTens]
-	ld [hli], a
-	ld a, [wCounterDigitOnes]
-	ld [hl], a
+;	ld hl, $9842
+;	ld a, [wCounterDigitTens]
+;	ld [hli], a
+;	ld a, [wCounterDigitOnes]
+;	ld [hl], a
 
         ;Display secret number
-	ld hl, $98A0
-	ld a, [wSecretNumDigitTens]
-	ld [hli], a
-	ld a, [wSecretNumDigitOnes]
-	ld [hl], a
+;	ld hl, $98A2
+;	ld a, [wSecretNumDigitTens]
+;	ld [hli], a
+;	ld a, [wSecretNumDigitOnes]
+;	ld [hl], a
 
         ;Display guess count
-	ld hl, $9900
+        ld hl, $9842
+        ld bc, StrGuesses 
+        call MemCopy
+
+	ld hl, $9862
 	ld a, [wGuessCountDigitTens] 
 	ld [hli], a
 	ld a, [wGuessCountDigitOnes] 
 	ld [hl], a
 
         ;Display guessed number
-	ld hl, $9960
+        ld hl, $98A2
+        ld bc, StrGuess 
+        call MemCopy
+
+	ld hl, $98C2
 	ld a, [wGuessNumDigitTens]
 	ld [hli], a
 	ld a, [wGuessNumDigitOnes]
 	ld [hl], a
 
         ;Display result
-;        ld hl, $99A0
-;        ld a, [wResult] 
-;        ld [hl], a
         ld a, [wResult]
         cp a, 0
         jp z, DisplayResultCorrect
@@ -221,23 +257,113 @@ UpdateTileMap:
         jp z, DisplayResultLower
 
 DisplayResultCorrect:
-        ld hl, $99A0
-        ld a, [StrCorrect] 
-        ld [hl], a
+        ld hl, $9902
+        ld bc, StrCorrect 
+        call MemCopy
+
         jp DisplayResultDone
 DisplayResultHigher:
-        ld hl, $99A0
-        ld a, [StrLower] ;if the guess is lower, display higher to the player 
-        ld [hl], a
+        ld hl, $9902
+        ld bc, StrLower ;if the guess is lower, display higher to the player 
+        call MemCopy
+
         jp DisplayResultDone
 DisplayResultLower:
-        ld hl, $99A0
-        ld a, [StrHigher]  ;if the guess is higher, display lower to the player
-        ld [hl], a
+        ld hl, $9902
+        ld bc, StrHigher ;if the guess is higher, display lower to the player 
+        call MemCopy
+
         jp DisplayResultDone
 DisplayResultDone:
 
+
+DisplayGameTextDone:
 	ret
+
+MemCopy: 
+        ;Copy 16 bytes at address bc to address at hl
+        ld a, [bc] 
+        ld [hl], a
+        inc hl
+        inc bc
+
+        ld a, [bc] 
+        ld [hl], a
+        inc hl
+        inc bc
+
+        ld a, [bc] 
+        ld [hl], a
+        inc hl
+        inc bc
+
+        ld a, [bc] 
+        ld [hl], a
+        inc hl
+        inc bc
+
+        ld a, [bc] 
+        ld [hl], a
+        inc hl
+        inc bc
+
+        ld a, [bc] 
+        ld [hl], a
+        inc hl
+        inc bc
+
+        ld a, [bc] 
+        ld [hl], a
+        inc hl
+        inc bc
+
+        ld a, [bc] 
+        ld [hl], a
+        inc hl
+        inc bc
+
+        ld a, [bc] 
+        ld [hl], a
+        inc hl
+        inc bc
+
+        ld a, [bc] 
+        ld [hl], a
+        inc hl
+        inc bc
+
+        ld a, [bc] 
+        ld [hl], a
+        inc hl
+        inc bc
+
+        ld a, [bc] 
+        ld [hl], a
+        inc hl
+        inc bc
+
+        ld a, [bc] 
+        ld [hl], a
+        inc hl
+        inc bc
+
+        ld a, [bc] 
+        ld [hl], a
+        inc hl
+        inc bc
+
+        ld a, [bc] 
+        ld [hl], a
+        inc hl
+        inc bc
+
+        ld a, [bc] 
+        ld [hl], a
+        inc hl
+        inc bc
+
+
+        ret
 
 GuessAddOne:
         ld a, [wGuessNumDigitOnes]
@@ -425,22 +551,26 @@ Tilemap:
 	db $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24,  0,0,0,0,0,0,0,0,0,0,0,0
 
         ;Random number display
-	db $1b, $0a, $17, $0d, $18, $16, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24,  0,0,0,0,0,0,0,0,0,0,0,0
+;	db $24, $24, $1b, $0a, $17, $0d, $18, $16, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, 0,0,0,0,0,0,0,0,0,0,0,0
+	db $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24,  0,0,0,0,0,0,0,0,0,0,0,0
 	db $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24,  0,0,0,0,0,0,0,0,0,0,0,0
 	db $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24,  0,0,0,0,0,0,0,0,0,0,0,0
 
         ;Secret number display
-	db $1c, $0e, $0c, $1b, $0e, $1d, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24,  0,0,0,0,0,0,0,0,0,0,0,0
+;	db $24, $24, $1c, $0e, $0c, $1b, $0e, $1d, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, 0,0,0,0,0,0,0,0,0,0,0,0
+	db $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24,  0,0,0,0,0,0,0,0,0,0,0,0
 	db $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24,  0,0,0,0,0,0,0,0,0,0,0,0
 	db $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24,  0,0,0,0,0,0,0,0,0,0,0,0
 
         ;Guess count display
-	db $10, $1e, $0e, $1c, $1c, $0e, $1c, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24,  0,0,0,0,0,0,0,0,0,0,0,0
+;	db $24, $24, $10, $1e, $0e, $1c, $1c, $0e, $1c, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24,  0,0,0,0,0,0,0,0,0,0,0,0
+	db $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24,  0,0,0,0,0,0,0,0,0,0,0,0
 	db $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24,  0,0,0,0,0,0,0,0,0,0,0,0
 	db $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24,  0,0,0,0,0,0,0,0,0,0,0,0
 
         ;Guess number display
-	db $10, $1e, $0e, $1c, $1c, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24,  0,0,0,0,0,0,0,0,0,0,0,0 
+;	db $24, $24, $10, $1e, $0e, $1c, $1c, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24,  0,0,0,0,0,0,0,0,0,0,0,0 
+	db $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24,  0,0,0,0,0,0,0,0,0,0,0,0
 	db $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24,  0,0,0,0,0,0,0,0,0,0,0,0
 	db $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24,  0,0,0,0,0,0,0,0,0,0,0,0
 
@@ -452,9 +582,15 @@ Tilemap:
 .End:
 
 
-StrHigher: db $11, $12, $10, $11, $0e, $1b, $24, $1d, $11, $0a, $17, $24, $24, $24, $24, $24, $24, $24, $24, $24
+StrHigher: db $11, $12, $10, $11, $0e, $1b, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24
 StrLower: db $15, $18, $20, $0e, $1b, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24
 StrCorrect: db $0c, $18, $1b, $1b, $0e, $0c, $1d, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24
+
+StrPressStart: db $19, $1b, $0e, $1c, $1c, $24, $1c, $1d, $0a, $1b, $1d, $24, $24, $24, $24, $24, $24, $24, $24, $24
+StrBlank: db $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24
+
+StrGuesses: db $10, $1e, $0e, $1c, $1c, $0e, $1c, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24
+StrGuess: db $10, $1e, $0e, $1c, $1c, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24, $24
 
 SECTION "Variables", WRAM0
 wCounterDigitOnes: db
@@ -470,6 +606,8 @@ wGuessCountDigitOnes: db
 wGuessCountDigitTens: db
 
 wResult: db
+
+wMode: db
 
 SECTION "Input Variables", WRAM0
 wCurKeys: db
