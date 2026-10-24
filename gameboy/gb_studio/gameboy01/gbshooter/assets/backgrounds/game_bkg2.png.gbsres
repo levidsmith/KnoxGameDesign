@@ -1,0 +1,12 @@
+{
+  "_resourceType": "background",
+  "id": "08c3c9a9-d2bd-4c06-a59b-544dab66e27e",
+  "name": "game_bkg2",
+  "symbol": "bg_game_bkg2",
+  "tileColors": "",
+  "filename": "game_bkg2.png",
+  "width": 20,
+  "height": 18,
+  "imageWidth": 160,
+  "imageHeight": 144
+}

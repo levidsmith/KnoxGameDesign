@@ -1,0 +1,94 @@
+{
+  "_resourceType": "scene",
+  "id": "5699d452-8e36-4de6-95c6-e0d9666e215e",
+  "_index": 0,
+  "name": "SceneGame",
+  "backgroundId": "08c3c9a9-d2bd-4c06-a59b-544dab66e27e",
+  "tilesetId": "",
+  "width": 20,
+  "height": 18,
+  "type": "SHMUP",
+  "colorModeOverride": "none",
+  "paletteIds": [],
+  "spritePaletteIds": [],
+  "collisions": "",
+  "autoFadeSpeed": 1,
+  "symbol": "scene_2",
+  "x": 434,
+  "y": 182,
+  "script": [
+    {
+      "command": "EVENT_TEXT",
+      "args": {
+        "text": [
+          "Knox Game Design\nOctober 2026 Demo"
+        ],
+        "__section": "text",
+        "avatarId": "",
+        "minHeight": 4,
+        "maxHeight": 7,
+        "textX": 1,
+        "textY": 1,
+        "textHeight": 5,
+        "position": "top",
+        "clearPrevious": true,
+        "showFrame": true,
+        "speedIn": -1,
+        "speedOut": -1,
+        "closeWhen": "key",
+        "closeButton": "a",
+        "closeDelayTime": 0.5,
+        "closeDelayFrames": 30
+      },
+      "id": "4daba93b-dbd6-4fc0-b8a0-4572dbbb16f3"
+    },
+    {
+      "command": "EVENT_SET_INPUT_SCRIPT",
+      "args": {
+        "input": [
+          "a"
+        ],
+        "override": true,
+        "__scriptTabs": "press"
+      },
+      "children": {
+        "true": [
+          {
+            "command": "EVENT_LAUNCH_PROJECTILE",
+            "args": {
+              "__section": "projectile",
+              "spriteSheetId": "a4c54d97-fc43-460f-a923-2e8831703e0a",
+              "spriteStateId": "",
+              "actorId": "$self$",
+              "x": 4,
+              "y": 12,
+              "directionType": "direction",
+              "otherActorId": "$self$",
+              "direction": "up",
+              "angle": 0,
+              "angleVariable": "L0",
+              "targetActorId": "$self$",
+              "speed": 2,
+              "animSpeed": 127,
+              "lifeTime": 1,
+              "initialOffset": 0,
+              "loopAnim": true,
+              "destroyOnHit": true,
+              "collisionGroup": "3",
+              "collisionMask": [
+                "1"
+              ]
+            },
+            "id": "a690510f-7ea4-43f5-a39c-ca79d853f6b1"
+          }
+        ]
+      },
+      "id": "c0174096-6621-4828-aa3a-650f2a0f2c06"
+    }
+  ],
+  "playerHit1Script": [],
+  "playerHit2Script": [],
+  "playerHit3Script": [],
+  "playerSpriteSheetId": "dca93024-02d8-4e6d-b59b-1fb9b7d8a1fc",
+  "autoFadeEventCollapse": false
+}

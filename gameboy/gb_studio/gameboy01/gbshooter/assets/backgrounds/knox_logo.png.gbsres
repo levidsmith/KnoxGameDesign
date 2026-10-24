@@ -1,0 +1,12 @@
+{
+  "_resourceType": "background",
+  "id": "95f0e453-060e-4279-a3b7-1988ff8b8d3e",
+  "name": "knox_logo",
+  "symbol": "bg_knox_logo",
+  "tileColors": "",
+  "filename": "knox_logo.png",
+  "width": 20,
+  "height": 18,
+  "imageWidth": 160,
+  "imageHeight": 144
+}
